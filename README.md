@@ -219,6 +219,76 @@ When you present this app to potential employers:
 - 🎥 30-second demo reel (show map, AI insights, smooth transitions)
 - 🧾 README with architecture diagram and short tech write-up
 
+# Developer Specific
+
+## Commands
+
+### ANDROID
+
+- adb devices
+- ./gradlew clean
+- ./gradle --stop
+- ps -A | grep gradle find all running dameons
+- sudo kill -9 <process ID> (Kill the process with this command)
+
+### Local Android Builds
+
+- Android APK no eas preview environment
+- 1. APP_ENV=preview npx expo prebuild --clean
+- 2. APP_ENV=preview npx expo run:android --variant release
+
+- Dev environment defaults to debug apk
+- 1. npx expo prebuild --clean
+- 2. npx expo run:android
+
+### EAS
+
+- npx eas build -p ios --clear-cache
+- npx eas build -p android --clear-cache
+
+### Metro for Local
+
+- npx expo start --clear
+
+<!-- TODO MAKE THIS A SCRIPT -->
+
+### Quick Clear Cache
+
+[expo cli clear cache](https://docs.expo.dev/troubleshooting/clear-cache-windows/#expo-cli-and-npm)
+
+- rm -rf node_modules
+- npm cache clean --force
+- npm install
+- watchman watch-del-all
+  <!-- - rm -fr $TMPDIR/haste-map-* -->
+  <!-- - rm -rf $TMPDIR/metro-cache -->
+- del %localappdata%Temphaste-map-\*
+- del %localappdata%Tempmetro-cache
+- npx expo start --clear
+
+## Troubleshooting
+
+1. ```
+      A problem occurred evaluating settings 'android'.
+      > A problem occurred starting process 'command 'node''
+   ```
+
+2. Installation error: INSTALL_PARSE_FAILED_NO_CERTIFICATES
+   posiibly due to running builds (no eas) on simulator then on usb device. The type of usb cable was also an issue for others in link below
+   https://stackoverflow.com/questions/2914105/what-is-install-parse-failed-no-certificates-error
+   - rm -rf node_modules
+   - rm package-lock.json
+   - rm -rf $TMPDIR/haste-map-\*
+   - rm -rf $TMPDIR/metro-cache
+   - watchman watch-del-all
+   - npm cache clean -f
+   - Make sure Android studio is closed
+   - uninstall any trace from phone
+   - npm i
+   - npx expo install --check
+   - npx expo-doctor
+   - npx expo run:android
+
 <!-- # Welcome to your Expo app 👋
 
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).

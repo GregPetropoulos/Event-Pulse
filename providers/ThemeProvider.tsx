@@ -1,37 +1,58 @@
-import React, { useState, createContext, ReactNode, useContext } from 'react';
-import { darkTheme, lightTheme } from '@/theme/theme';
+import React, { useState, useCallback, createContext, useEffect, ReactNode, useContext } from 'react';
+import { ThemeMode, THEMES } from '@/theme/theme';
+import { storage } from '@/storage/mmkv';
 import { useColorScheme } from 'react-native';
 
-export type Theme = typeof darkTheme;
+const THEME_KEY = 'themeMode'; //stored in MMKV
 
-enum modeTheme {
-  LIGHT = 'light',
-  DARK = 'dark',
+interface ThemeContextProps {
+  mode: ThemeMode;
+  theme: typeof THEMES.light;
+  toggleTheme: () => void;
+  setTheme: (m: ThemeMode) => void;
+  resetToSystem: () => void;
 }
 
-interface ThemeContextValue {
-  theme: Theme;
-  setOverrideMode: (mode: modeTheme.LIGHT | modeTheme.DARK | null) => void;
-}
-
-const ThemeContext = createContext<ThemeContextValue>({
-  theme: darkTheme,
-  setOverrideMode: () => {},
-}); // default to dark
+const ThemeContext = createContext<ThemeContextProps | null>(null);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const systemMode = useColorScheme(); //light or dark
-  const [overrideMode, setOverrideMode] = useState<modeTheme.LIGHT | modeTheme.DARK | null>(null);
-  const currentTheme =
-    overrideMode === modeTheme.LIGHT
-      ? lightTheme
-      : overrideMode === modeTheme.DARK
-        ? darkTheme
-        : systemMode === modeTheme.LIGHT
-          ? lightTheme
-          : darkTheme;
-  return <ThemeContext value={{ theme: currentTheme, setOverrideMode }}>{children}</ThemeContext>;
+  const systemMode = useColorScheme() as ThemeMode; //light | dark | null
+
+  // ✅ Only read storage once → prevents flashing
+  const storedMode = storage.getString(THEME_KEY) as ThemeMode | 'system' | null;
+  // initial mode: respect system unless user explicitly chose one
+  const [mode, setModeState] = useState<ThemeMode>(storedMode && storedMode !== 'system' ? storedMode : systemMode || 'dark');
+  // persist whenever user explicitly sets
+  const setTheme = useCallback((m: ThemeMode) => {
+    setModeState(m);
+    storage.set(THEME_KEY, m);
+  }, []);
+
+  const toggleTheme = useCallback(() => {
+    const next = mode === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+  }, [mode]);
+
+  // allow “reset to auto” (system)
+  const resetToSystem = useCallback(() => {
+    storage.set(THEME_KEY, 'system');
+    setModeState(systemMode || 'dark');
+  }, [systemMode]);
+
+  // watch system preference changes
+  useEffect(() => {
+    if (storedMode === 'system' || !storedMode) {
+      setModeState(systemMode || 'dark');
+    }
+  }, [systemMode, storedMode]);
+
+  const theme = THEMES[mode];
+
+  return <ThemeContext.Provider value={{ mode, theme, toggleTheme, setTheme, resetToSystem }}>{children}</ThemeContext.Provider>;
 };
 
-export const useTheme = () => useContext(ThemeContext);
-// TODO  SET STYLE BACKGROUNDS AND CHECK LIGHT/DARKSWITCH
+export const useAppTheme = () => {
+  const ctx = useContext(ThemeContext);
+  if (!ctx) throw new Error('useAppTheme must be used in the ThemeProvider');
+  return ctx;
+};

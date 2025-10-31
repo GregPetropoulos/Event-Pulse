@@ -317,12 +317,12 @@ This pattern ensures:
 
 ## 🗓️ Development Timeline (3 Months)
 
-| Phase                   | Duration                 | Deliverables                                                                               |
-| ----------------------- | ------------------------ | ------------------------------------------------------------------------------------------ |
-| 1️⃣ Foundations          | Weeks 1–3 Start (10/23)  | Expo setup, Zustand + MMKV integration, Prettier, Theme Light & DarkMode, Splash, Map view |
-| 2️⃣ Data Integration     | Weeks 4–6 Start (11/13)  | Event APIs + caching + navigation                                                          |
-| 3️⃣ AI + Native Features | Weeks 7–9 Start (12/25)  | OpenAI integration, Calendar, Notifications                                                |
-| 4️⃣ Polish & Launch      | Weeks 10–12 Start (1/15) | Animations, Showcase screen, store deployment                                              |
+| Phase                   | Duration                 | Deliverables                                                                                |
+| ----------------------- | ------------------------ | ------------------------------------------------------------------------------------------- |
+| 1️⃣ Foundations          | Weeks 1–3 Start (10/23)  | Expo setup, Zustand + MMKV integration, Prettier, Theme Light & Dark Mode, Splash, Map view |
+| 2️⃣ Data Integration     | Weeks 4–6 Start (11/13)  | Event APIs + caching + navigation                                                           |
+| 3️⃣ AI + Native Features | Weeks 7–9 Start (12/25)  | OpenAI integration, Calendar, Notifications                                                 |
+| 4️⃣ Polish & Launch      | Weeks 10–12 Start (1/15) | Animations, Haptics, Showcase screen, store deployment                                      |
 
 ## 🧠 Recap — Why This App Impresses
 

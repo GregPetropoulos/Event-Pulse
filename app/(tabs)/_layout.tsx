@@ -3,21 +3,21 @@ import React from 'react';
 
 import { HapticTab } from '@/components/common/HapticTab';
 import { IconSymbol } from '@/components/common/IconSymbol';
-import { Colors } from '@/constants/theme';
-import { useColorScheme } from '@/hooks/use-color-scheme';
+import { useAppTheme } from '@/providers/ThemeProvider';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const { theme } = useAppTheme();
 
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.secondary,
         headerShown: false,
         tabBarButton: HapticTab,
       }}>
       <Tabs.Screen
-        name='(home)/index'
+        name='(home)'
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
@@ -44,7 +44,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name='favorites/index'
+        name='favorites'
         options={{
           title: 'Favs',
           tabBarIcon: ({ color }) => (
@@ -57,27 +57,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='favorites/[id]'
-        options={{
-          title: 'Favorite',
-          href: null, //hide tab from bottom tabs
-          tabBarIcon: ({ color }) => (
-            <IconSymbol
-              size={28}
-              name='heart.circle'
-              color={color}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name='about'
         options={{
           title: 'About',
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}
-              name='paperplane.fill'
+              name='info.circle'
               color={color}
             />
           ),

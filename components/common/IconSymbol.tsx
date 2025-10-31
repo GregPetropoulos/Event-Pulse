@@ -20,6 +20,7 @@ const MAPPING = {
   'heart.circle': 'favorite-outline',
   'sun.max.fill': 'sunny',
   'safari.fill': 'explore',
+  'info.circle': 'info-outline',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'chevron.left': 'chevron-left',
