@@ -1,35 +1,37 @@
-import { Text, View, Switch, Button } from 'react-native';
+import { Text, View, FlatList, Pressable } from 'react-native';
 import { ThemedView } from '@/components/common/ThemedView';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/providers/ThemeProvider';
+import { cardData } from '@/mocks/cardData';
+
 export default function HomeScreen() {
-  const insets = useSafeAreaInsets();
-  const { theme, toggleTheme, resetToSystem, mode } = useAppTheme();
-
+  const { theme } = useAppTheme();
+  const renderItem = ({ item }: { item: { id: number; title: string } }) => {
+    return (
+      <Pressable onPress={() => console.log('card press')}>
+        <View>
+          <Text style={{ ...theme.typography.body, color: theme.colors.primary }}>{item.title}</Text>
+        </View>
+      </Pressable>
+    );
+  };
   return (
-    <ThemedView>
-      <Text style={{ color: theme.colors.primary }}>HOME</Text>
-      <Text style={{ ...theme.typography.title, color: theme.colors.textPrimary }}>EventPulse{mode}</Text>
+    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+      <Text style={{ color: theme.colors.primary }}>Map</Text>
+      <Text style={{ color: theme.colors.primary }}>Tabs</Text>
+      <Text style={{ color: theme.colors.primary }}>Cards</Text>
+      <Text style={{ ...theme.typography.title, color: theme.colors.textPrimary }}>Event Pulse</Text>
       {/* <View> */}
-      <Switch
-        value={mode === 'dark'}
-        onValueChange={toggleTheme}
-        thumbColor={theme.colors.primary}
-        trackColor={{ true: theme.colors.secondary, false: '#888' }}
-        style={{ marginVertical: 20 }}
-      />
 
-      <Button
-        title='Reset to System'
-        onPress={resetToSystem}
-        color={theme.colors.primary}
-      />
-      {/* <PrimaryButton
+      <PrimaryButton
         title='TEST'
-        onPress={toggleTheme}
-      /> */}
+        onPress={() => console.log('TESTTTT')}
+      />
+      <FlatList
+        data={cardData}
+        renderItem={renderItem}
+      />
       {/* </View> */}
-    </ThemedView>
+    </View>
   );
 }

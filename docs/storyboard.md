@@ -341,3 +341,10 @@ This pattern ensures:
 ✅ Production architecture (feature-based modular)
 
 ✅ No login — instant recruiter demo value
+
+
+Notes Polish Features:
+- Animation logo pulsing from splash to home -- loading
+- Bottom tabs hide on scroll down, like linkedIn
+- Bottom tabs haptics
+- Typography

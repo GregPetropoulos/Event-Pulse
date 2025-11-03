@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { ThemeProvider, useAppTheme } from '@/providers/ThemeProvider';
 import { StatusBar } from 'expo-status-bar';
@@ -18,6 +18,7 @@ export const unstable_settings = {
 
 export const RootNavigationWrapper = () => {
   const { theme } = useAppTheme();
+  const { top, left, right, bottom } = useSafeAreaInsets();
 
   const [isReady, setIsReady] = useState(false);
 
@@ -46,17 +47,29 @@ export const RootNavigationWrapper = () => {
   }
   return (
     <NavigationThemeProvider value={theme}>
-      <Stack>
-        <Stack.Screen
-          name='(tabs)'
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name='modal'
-          options={{ presentation: 'modal', title: 'Modal' }}
-        />
-      </Stack>
-      <StatusBar style={theme.dark ? 'light' : 'dark'} />
+      <SafeAreaView
+        style={{
+          flex: 1,
+          backgroundColor: theme.colors.background,
+          borderColor: 'red',
+          borderWidth: 1,
+          // paddingTop: top,
+          // paddingBottom: bottom,
+          paddingLeft: left + 15,
+          paddingRight: right + 15,
+        }}>
+        <Stack>
+          <Stack.Screen
+            name='(tabs)'
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name='modal'
+            options={{ presentation: 'modal', title: 'Modal' }}
+          />
+        </Stack>
+        <StatusBar style={theme.dark ? 'light' : 'dark'} />
+      </SafeAreaView>
     </NavigationThemeProvider>
   );
 };

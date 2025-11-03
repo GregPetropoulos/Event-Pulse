@@ -1,0 +1,73 @@
+import React, { forwardRef, useState } from 'react';
+import { TextInput, View, StyleSheet, TextInputProps } from 'react-native';
+import { useAppTheme } from '@/providers/ThemeProvider';
+import { IconSymbol } from './common/IconSymbol';
+
+interface SearchBarProps extends TextInputProps {
+  placeholder?: string;
+}
+const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, ...rest }, ref) => {
+  const [text, setText] = useState('');
+  const { theme } = useAppTheme();
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const handleFocus = () => setIsSearchFocused(true);
+  const handleBlur = () => setIsSearchFocused(false);
+  return (
+    <View
+      style={{
+        ...styles.inputContainer,
+        backgroundColor: theme.colors.surface,
+        borderColor: isSearchFocused ? theme.colors.secondary : theme.colors.border,
+        borderWidth: isSearchFocused ? 1.5 : 1,
+      }}>
+      {!text && (
+        <IconSymbol
+          name='magnifyingglass'
+          color={theme.colors.textSecondary}
+          size={20}
+        />
+      )}
+      <TextInput
+        ref={ref}
+        placeholder={placeholder ?? 'Search for events by city'}
+        placeholderTextColor={theme.colors.textSecondary}
+        value={text}
+        onChangeText={setText}
+        style={{
+          ...styles.input,
+          ...theme.typography.body,
+          color: theme.colors.secondary,
+        }}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        returnKeyType='search'
+        clearButtonMode='while-editing' // iOS-specific clear button for convenience
+        autoCorrect={false} // Optional: disable auto-correct for search
+        autoCapitalize='none'
+        accessibilityLabel='Enter a city name for local events'
+        accessibilityHint='Type the name of US city to find events in that city'
+        accessibilityRole='text'
+        accessibilityValue={{ text }}
+      />
+    </View>
+  );
+  // Add this for The ESLint error "Component definition is missing display name" occurs because the anonymous arrow function you passed to forwardRef doesn't automatically get a displayName property for use in React DevTools
+  SearchBar.displayName = 'SearchBar';
+});
+
+const styles = StyleSheet.create({
+  inputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    marginTop: 20,
+  },
+  input: {
+    marginLeft: 10,
+    height: 40,
+    flex: 1,
+  },
+});
+export default SearchBar;

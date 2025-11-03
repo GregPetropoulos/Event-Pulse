@@ -1,9 +1,10 @@
 import { Slot } from 'expo-router';
-import { ThemedView } from '@/components/common/ThemedView';
+import { View } from 'react-native';
+
 export default function Layout() {
   return (
-    <ThemedView>
+    <View>
       <Slot />
-    </ThemedView>
+    </View>
   );
 }

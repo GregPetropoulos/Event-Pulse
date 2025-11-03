@@ -21,6 +21,8 @@ const MAPPING = {
   'sun.max.fill': 'sunny',
   'safari.fill': 'explore',
   'info.circle': 'info-outline',
+  'gearshape.fill': 'settings',
+  'magnifyingglass': 'search',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'chevron.left': 'chevron-left',
