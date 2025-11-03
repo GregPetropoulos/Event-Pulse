@@ -5,13 +5,16 @@ import { IconSymbol } from './common/IconSymbol';
 
 interface SearchBarProps extends TextInputProps {
   placeholder?: string;
+  onChange?:()=> void;
+  value?:string;
 }
-const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, ...rest }, ref) => {
+const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder,onChange,value, ...rest }, ref) => {
   const [text, setText] = useState('');
   const { theme } = useAppTheme();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const handleFocus = () => setIsSearchFocused(true);
   const handleBlur = () => setIsSearchFocused(false);
+
   return (
     <View
       style={{
@@ -28,11 +31,12 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, ...rest 
         />
       )}
       <TextInput
+      testID='search-input'
         ref={ref}
         placeholder={placeholder ?? 'Search for events by city'}
         placeholderTextColor={theme.colors.textSecondary}
-        value={text}
-        onChangeText={setText}
+        value={value ?? text}
+        onChangeText={onChange ?? setText}
         style={{
           ...styles.input,
           ...theme.typography.body,

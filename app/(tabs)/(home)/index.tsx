@@ -2,7 +2,7 @@ import { Text, View, FlatList, Pressable } from 'react-native';
 import { ThemedView } from '@/components/common/ThemedView';
 import { PrimaryButton } from '@/components/common/PrimaryButton';
 import { useAppTheme } from '@/providers/ThemeProvider';
-import { cardData } from '@/mocks/cardData';
+import { cardData } from '@/__mocks__/cardData';
 
 export default function HomeScreen() {
   const { theme } = useAppTheme();

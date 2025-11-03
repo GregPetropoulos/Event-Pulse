@@ -223,7 +223,7 @@ When you present this app to potential employers:
 
 ## Commands
 
-### ANDROID
+### Android
 
 - adb devices
 - ./gradlew clean
@@ -250,9 +250,14 @@ When you present this app to potential employers:
 
 - npx expo start --clear
 
-<!-- TODO MAKE THIS A SCRIPT -->
+### Jest Testing
+- npm test
+- npm test -- --watch
+- npx jest --clearCache
+
 
 ### Quick Clear Cache
+<!-- TODO MAKE THIS A CLEAR CACHE SCRIPT -->
 
 [expo cli clear cache](https://docs.expo.dev/troubleshooting/clear-cache-windows/#expo-cli-and-npm)
 
@@ -288,6 +293,9 @@ When you present this app to potential employers:
    - npx expo install --check
    - npx expo-doctor
    - npx expo run:android
+3. Peer deps check
+   - npm ls react react-test-renderer (had to downgrade this to react 19.1, it wanted react 19.2)
+
 
 <!-- # Welcome to your Expo app 👋
 
