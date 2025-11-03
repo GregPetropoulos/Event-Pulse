@@ -1,5 +1,5 @@
 import { ThemedView } from '@/components/common/ThemedView';
-import {View, Text, Switch, Button } from 'react-native';
+import { View, Text, Switch, Button } from 'react-native';
 import { useAppTheme } from '@/providers/ThemeProvider';
 
 const Settings = () => {

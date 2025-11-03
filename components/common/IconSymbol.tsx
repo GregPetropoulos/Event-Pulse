@@ -22,7 +22,7 @@ const MAPPING = {
   'safari.fill': 'explore',
   'info.circle': 'info-outline',
   'gearshape.fill': 'settings',
-  'magnifyingglass': 'search',
+  magnifyingglass: 'search',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'chevron.left': 'chevron-left',
