@@ -1,7 +1,6 @@
-import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
-import SearchBar from '@/components/SearchBar';
+import SearchBar from '@/components/SearchBar/SearchBar';
 import { ThemeProvider } from '@/providers/ThemeProvider';
+import { fireEvent, render } from '@testing-library/react-native';
 
 describe('SearchBar', () => {
   it('renders placeholder and updates input text', () => {
@@ -20,6 +19,6 @@ describe('SearchBar', () => {
     const input = getByPlaceholderText('Search for events by city');
     fireEvent.changeText(input, 'concerts near me');
     expect(mockOnChange).toHaveBeenCalledWith('concerts near me');
-    expect(getByTestId('search-input').props.value).toBe('');
+    expect(getByTestId('search-input-id').props.value).toBe('');
   });
 });

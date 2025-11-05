@@ -1,8 +1,8 @@
-import React, { useRef, useEffect } from 'react';
-import { View, TouchableWithoutFeedback, TextInput, Keyboard } from 'react-native';
-import { Slot } from 'expo-router';
+import SearchBar from '@/components/SearchBar/SearchBar';
 import { useNavigation } from '@react-navigation/native';
-import SearchBar from '@/components/SearchBar';
+import { Slot } from 'expo-router';
+import { useEffect, useRef } from 'react';
+import { Keyboard, TextInput, TouchableWithoutFeedback, View } from 'react-native';
 
 export default function HomeLayout() {
   const navigation = useNavigation();

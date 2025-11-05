@@ -1,7 +1,7 @@
-import React, { forwardRef, useState } from 'react';
-import { TextInput, View, StyleSheet, TextInputProps } from 'react-native';
 import { useAppTheme } from '@/providers/ThemeProvider';
-import { IconSymbol } from './common/IconSymbol';
+import { forwardRef, useState } from 'react';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { IconSymbol } from '../common/IconSymbol';
 
 interface SearchBarProps extends TextInputProps {
   placeholder?: string;
@@ -31,7 +31,7 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
         />
       )}
       <TextInput
-        testID='search-input'
+        testID='search-input-id'
         ref={ref}
         placeholder={placeholder ?? 'Search for events by city'}
         placeholderTextColor={theme.colors.textSecondary}

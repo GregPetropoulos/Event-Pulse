@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import useDeviceInfo from '@/hooks/useDeviceInfo';
@@ -13,7 +13,8 @@ export const PrimaryButton = ({ title, onPress }: PrimaryButtonProps) => {
   } = useAppTheme();
   const { width, isLandscape } = useDeviceInfo();
   return (
-    <TouchableOpacity
+    <Pressable
+      testID='primary-button-id'
       onPress={onPress}
       style={{ width: width / 2.5, height: 'auto' }}>
       <LinearGradient
@@ -37,6 +38,6 @@ export const PrimaryButton = ({ title, onPress }: PrimaryButtonProps) => {
           {title}
         </Text>
       </LinearGradient>
-    </TouchableOpacity>
+    </Pressable>
   );
 };
