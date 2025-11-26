@@ -22,6 +22,7 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
         backgroundColor: theme.colors.surface,
         borderColor: isSearchFocused ? theme.colors.secondary : theme.colors.border,
         borderWidth: isSearchFocused ? 1.5 : 1,
+        marginHorizontal:theme.spacing.sm
       }}>
       {!text && (
         <IconSymbol
