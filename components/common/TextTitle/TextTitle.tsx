@@ -1,15 +1,38 @@
-import { Text } from 'react-native';
 import React from 'react';
+import { StyleSheet, Text, TextProps, TextStyle, StyleProp } from 'react-native';
 import { useAppTheme } from '@/providers/ThemeProvider';
 
-type TextTitleProps = {
-  children: string | React.ReactNode;
-  color?: string;
-};
-const TextTitle = ({ children, color }: TextTitleProps) => {
+// Use omit to remove fontFamily, fontSize, and lineHeight from the non fixed styles
+type TextTitleStyle = Omit<TextStyle, 'fontFamily' | 'fontSize' | 'lineHeight'>;
+// Define the component props , use the restricted style type
+interface TextTitleProps extends Omit<TextProps, 'style'> {
+  children: React.ReactNode;
+  style?: StyleProp<TextTitleStyle>;
+}
+const TextTitle = ({ children, style, ...props }: TextTitleProps) => {
   const { theme } = useAppTheme();
-
-  return <Text style={{ ...theme.typography.title, color: color ?? theme.colors.textPrimary }}>{children}</Text>;
+  // Enforced base style
+  const fixedTypographyStyles: TextStyle = {
+    ...theme.typography.title,
+  };
+  //!STOPPED SHORE UP TESTS
+  const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
+  return (
+    <Text
+      style={[
+        styles.defaultStyles,
+        defaultColorStyle,
+        style,
+        //These styles are applied last and will override any conflicting styles in the 'style' prop
+        fixedTypographyStyles,
+      ]}
+      {...props}>
+      {children}
+    </Text>
+  );
 };
 
 export default TextTitle;
+const styles = StyleSheet.create({
+  defaultStyles: {},
+});

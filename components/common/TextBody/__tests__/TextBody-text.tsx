@@ -1,6 +1,5 @@
-
 import { render, screen } from '@testing-library/react-native';
-import TextBody from '../TextBody';
+import TextBody from '../TextBody'
 import { mockTheme } from '../../../../__mocks__/mockTheme';
 
 jest.mock('@/providers/ThemeProvider', () => ({
@@ -16,37 +15,36 @@ describe('TextBody Component', () => {
     expect(screen.getByText(testMessage)).toBeOnTheScreen();
   });
 
-  it('applies the default theme primary color when no color prop is provided', () => {
+  it('applies the default theme primary color when no color style is provided', () => {
     const testMessage = 'Default color text';
     render(<TextBody>{testMessage}</TextBody>);
 
     const textComponent = screen.getByText(testMessage);
 
     // Check if the style applied to the component matches the mock theme's color
-    expect(textComponent.props.style.color).toBe(mockTheme.colors.textPrimary);
+    expect(textComponent.props.style[1].color).toBe(mockTheme.colors.textPrimary);
   });
 
-  it('applies a custom color when the color prop is provided', () => {
+  it('applies a custom color when the override color is provided to the style', () => {
     const testMessage = 'Custom color text';
-    const customColor = '#FF0000'; 
-    render(<TextBody color={customColor}>{testMessage}</TextBody>);
+    const customColor = '#FF0000';
+    render(<TextBody style={{ color: customColor }}>{testMessage}</TextBody>);
 
     const textComponent = screen.getByText(testMessage);
 
     // Check if the style applied matches the custom color prop, overriding the default
-    expect(textComponent.props.style.color).toBe(customColor);
+    expect(textComponent.props.style[2].color).toBe(customColor);
   });
 
-  it('applies default typography styles from the theme', () => {
-    const testMessage = 'Styled text';
+  it('applies fixedTypographyStyles typography styles from the theme', () => {
+    const testMessage = 'Themed Styled text';
     render(<TextBody>{testMessage}</TextBody>);
 
     const textComponent = screen.getByText(testMessage);
-
     // Check if the typography styles from the mock theme are present
-    expect(textComponent.props.style.fontSize).toBe(mockTheme.typography.body.fontSize);
-    expect(textComponent.props.style.fontFamily).toBe(mockTheme.typography.body.fontFamily);
-    expect(textComponent.props.style.lineHeight).toBe(mockTheme.typography.body.lineHeight);
+    expect(textComponent.props.style[3].fontFamily).toBe(mockTheme.typography.title.fontFamily);
+    expect(textComponent.props.style[3].fontSize).toBe(mockTheme.typography.title.fontSize);
+    expect(textComponent.props.style[3].lineHeight).toBe(mockTheme.typography.title.lineHeight);
   });
 
   it('renders React nodes as children', () => {
