@@ -348,3 +348,10 @@ Notes Polish Features:
 - Bottom tabs hide on scroll down, like linkedIn
 - Bottom tabs haptics
 - Typography
+- Check Map Config  -- Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
+- Add advanced controls to map view
+- Hide API KEYS on separate custom server
+- Outside of the app I Build out light weight express server to handle backend calls via proxy to keeps safe, with rate limiting and caching
+
+Notes on add ons
+- Added unit testing for common components and hooks

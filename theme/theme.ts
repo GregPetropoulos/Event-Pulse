@@ -51,6 +51,7 @@ const common = {
   gradient: {
     // primary: ['#7C3AED', '#00C6FF'],
     primary: ['#FF4EC7', '#FF8A34'],
+    secondary: ['#00C7FF', '#7C3AED'],
   },
   radius: {
     sm: 8,
@@ -91,6 +92,86 @@ const common = {
       fontSize: 14,
       fontStyle: 'italic',
       lineHeight: 20,
+    },
+  },
+  components: {
+    secondaryButton: {
+      xs: {
+        fontFamily: 'Inter-Light',
+        fontSize: 12,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      sm: {
+        fontFamily: 'Inter-Light',
+        fontSize: 13,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      md: {
+        fontFamily: 'Inter-Light',
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      lg: {
+        fontFamily: 'Inter-Light',
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+    },
+    primaryButton: {
+      xs: {
+        fontFamily: 'Inter-Light',
+        fontSize: 12,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      sm: {
+        fontFamily: 'Inter-Light',
+        fontSize: 13,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      md: {
+        fontFamily: 'Inter-Light',
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      lg: {
+        fontFamily: 'Inter-Light',
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+    },
+    cancelButton: {
+      xs: {
+        fontFamily: 'Inter-Light',
+        fontSize: 12,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      sm: {
+        fontFamily: 'Inter-Light',
+        fontSize: 13,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      md: {
+        fontFamily: 'Inter-Light',
+        fontSize: 16,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
+      lg: {
+        fontFamily: 'Inter-Light',
+        fontSize: 18,
+        textAlign: 'center',
+        fontWeight: 600,
+      },
     },
   },
 } as const;

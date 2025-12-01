@@ -15,7 +15,7 @@ const TextTitle = ({ children, style, ...props }: TextTitleProps) => {
   const fixedTypographyStyles: TextStyle = {
     ...theme.typography.title,
   };
-  //!STOPPED SHORE UP TESTS
+  
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (
     <Text

@@ -7,6 +7,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts,", "eslint.config.js", "expo-env.d.ts", "__mocks__/LocationList.js"],
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts,", "eslint.config.js", "expo-env.d.ts", "__mocks__/"],
   "exclude": ["node_modules", "**/__tests__/**"]
 }

@@ -246,6 +246,17 @@ When you present this app to potential employers:
 - npx eas build -p ios --clear-cache
 - npx eas build -p android --clear-cache
 
+### Core Build Commands:
+
+- `eas build` : This command initiates a new build for your project. By default, it targets the production profile, suitable for app store submissions.
+
+- `eas build --profile development --platform [android|ios]`: Creates a development build, which is a development client that loads JavaScript from your local machine. This is ideal for active development and debugging.
+
+- `eas build --profile preview --platform [android|ios]`: Creates a preview build, which is a standalone, installable application (APK for Android, IPA for iOS) without the development client. This is useful for sharing with clients or for internal testing.
+
+- `eas build --local`: Runs any eas build command on your local machine instead of on EAS servers. This is helpful for debugging build failures or for local testing.
+
+
 ### Metro for Local
 
 - npx expo start --clear

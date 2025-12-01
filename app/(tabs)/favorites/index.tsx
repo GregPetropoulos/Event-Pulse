@@ -5,10 +5,10 @@ import { useAppTheme } from '@/providers/ThemeProvider';
 const Favorites = () => {
   const { theme } = useAppTheme();
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ flex: 1 }}>
-        <Text style={{ color: theme.colors.secondary }}>Favorites Home</Text>
-      </View>
+    <View style={{  backgroundColor:'green'}}>
+      {/* <View style={{ flex: 1 }}> */}
+        <Text style={{ color: 'red',fontSize:44 }}>My Favorites</Text>
+      {/* </View> */}
     </View>
   );
 };

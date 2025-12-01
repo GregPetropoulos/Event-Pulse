@@ -45,18 +45,20 @@ export const RootNavigationWrapper = () => {
   if (!isReady) {
     return null;
   }
+
   return (
     <NavigationThemeProvider value={theme}>
       <SafeAreaView
         style={{
           flex: 1,
           backgroundColor: theme.colors.background,
+          // backgroundColor: theme.colors.error,
           borderColor: 'red',
           borderWidth: 1,
           // paddingTop: top,
           // paddingBottom: bottom,
-          paddingLeft: left + 15,
-          paddingRight: right + 15,
+          // paddingLeft: left + 15,
+          // paddingRight: right + 15,
         }}>
         <Stack>
           <Stack.Screen
@@ -64,8 +66,8 @@ export const RootNavigationWrapper = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name='modal'
-            options={{ presentation: 'modal', title: 'Modal' }}
+            name='locationPermissionsModal'
+            options={{ presentation: 'modal', title: 'Location Permissions' }}
           />
         </Stack>
         <StatusBar style={theme.dark ? 'light' : 'dark'} />

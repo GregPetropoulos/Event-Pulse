@@ -15,7 +15,7 @@ const TextBody = ({ children, style, ...props }: TextBodyProps) => {
   const fixedTypographyStyles: TextStyle = {
     ...theme.typography.body,
   };
-  //!STOPPED SHORE UP TESTS
+
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (
     <Text

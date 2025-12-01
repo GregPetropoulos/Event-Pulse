@@ -18,7 +18,7 @@ export default function TabLayout() {
         headerStyle: { backgroundColor: theme.colors.primary },
       })}>
       <Tabs.Screen
-        name='(home)'
+        name='(home)/index'
         options={{
           headerShown: false,
           title: 'Home',

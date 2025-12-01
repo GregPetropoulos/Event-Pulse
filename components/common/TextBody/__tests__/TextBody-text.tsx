@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react-native';
-import TextBody from '../TextBody'
+import TextBody from '../TextBody';
 import { mockTheme } from '../../../../__mocks__/mockTheme';
 
 jest.mock('@/providers/ThemeProvider', () => ({
