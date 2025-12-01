@@ -13,7 +13,7 @@ const TextBody = ({ children, style, ...props }: TextBodyProps) => {
   const { theme } = useAppTheme();
   // Enforced base style
   const fixedTypographyStyles: TextStyle = {
-    ...theme.typography.title,
+    ...theme.typography.body,
   };
   //!STOPPED SHORE UP TESTS
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };

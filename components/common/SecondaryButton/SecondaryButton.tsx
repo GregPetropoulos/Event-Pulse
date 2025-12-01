@@ -3,23 +3,24 @@ import { useAppTheme } from '@/providers/ThemeProvider';
 import { LinearGradient } from 'expo-linear-gradient';
 import useDeviceInfo from '@/hooks/useDeviceInfo';
 
-interface PrimaryButtonProps {
+interface SecondaryButtonProps {
   title: string;
   onPress: () => void;
   buttonWidth?: number;
   size?: 'xs' | 'sm' | 'md' | 'lg';
 }
-const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps) => {
+const SecondaryButton = ({ title, onPress, buttonWidth, size }: SecondaryButtonProps) => {
   const {
     theme: { colors, gradient, radius, spacing, components },
   } = useAppTheme();
   const { width, isLandscape } = useDeviceInfo();
   return (
     <Pressable
-      testID='primary-button-id'
+      testID='secondary-button-id'
       onPress={onPress}
+      accessibilityLabel='secondary button'
       style={{
-         width: buttonWidth
+        width: buttonWidth
           ? buttonWidth
           : size === 'xs'
             ? width / 4
@@ -35,15 +36,15 @@ const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps
         marginHorizontal: 2,
       }}>
       <LinearGradient
-        testID='primary-button-linear-gradient'
-        colors={[gradient.primary[0], gradient.primary[1]]}
+        testID='secondary-button-linear-gradient'
+        colors={[gradient.secondary[0], gradient.secondary[1]]}
         style={{
-          backgroundColor: colors.primary,
+          backgroundColor: colors.secondary,
           borderRadius: radius.sm,
-          padding: spacing.sm,
+          paddingVertical: spacing.xs,
         }}>
         <Text
-          style={{ ...components.primaryButton[size ?? 'md'], color: colors.textPrimary }}
+          style={{ ...components.secondaryButton[size ?? 'md'], color: colors.textSecondary }}
           numberOfLines={1}
           ellipsizeMode='tail'>
           {title}
@@ -52,4 +53,4 @@ const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps
     </Pressable>
   );
 };
-export default PrimaryButton;
+export default SecondaryButton;

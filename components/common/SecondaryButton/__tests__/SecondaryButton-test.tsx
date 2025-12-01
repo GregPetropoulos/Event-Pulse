@@ -1,5 +1,5 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import PrimaryButton from '../PrimaryButton';
+import SecondaryButton from '../SecondaryButton';
 import { mockTheme } from '../../../../__mocks__/mockTheme';
 
 // 1. Mock the useAppTheme hook
@@ -37,7 +37,7 @@ jest.mock('expo-linear-gradient', () => {
 // --- Test Suite ---
 
 const mockOnPress = jest.fn();
-describe('PrimaryButton', () => {
+describe('SecondaryButton', () => {
   const buttonTitle = 'Press Me';
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('PrimaryButton', () => {
 
   it('renders the button title correctly', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         title={buttonTitle}
         onPress={mockOnPress}
       />,
@@ -59,14 +59,14 @@ describe('PrimaryButton', () => {
 
   it('calls the onPress handler when the button is pressed', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         title={buttonTitle}
         onPress={mockOnPress}
       />,
     );
 
     // Find the Pressable component using its testID
-    const button = screen.getByTestId('primary-button-id');
+    const button = screen.getByTestId('secondary-button-id');
 
     // Simulate a press event
     fireEvent.press(button);
@@ -78,58 +78,58 @@ describe('PrimaryButton', () => {
   // Test to verify props passed to the *non-mocked* LinearGradient component
   it('verifies that LinearGradient received the correct colors prop', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         title={buttonTitle}
         onPress={mockOnPress}
       />,
     );
 
-    const buttonLinearGradient = screen.getByTestId('primary-button-linear-gradient');
-    expect(buttonLinearGradient).toHaveProp('colors', [mockTheme.gradient.primary[0], mockTheme.gradient.primary[1]]);
+    const buttonLinearGradient = screen.getByTestId('secondary-button-linear-gradient');
+    expect(buttonLinearGradient).toHaveProp('colors', [mockTheme.gradient.secondary[0], mockTheme.gradient.secondary[1]]);
     expect(buttonLinearGradient).toBeOnTheScreen();
   });
   it('renders a xs size when provided', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         onPress={mockOnPress}
         title={buttonTitle}
         size='xs'
       />,
     );
 
-    const primaryButton = screen.getByTestId('primary-button-id');
-    expect(primaryButton).toBeTruthy();
-    expect(primaryButton.props.style.width).toBe(97.5);
+    const secondaryButton = screen.getByTestId('secondary-button-id');
+    expect(secondaryButton).toBeTruthy();
+    expect(secondaryButton.props.style.width).toBe(97.5);
   });
   it('renders a lg size when provided', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         onPress={mockOnPress}
         title={buttonTitle}
         size='lg'
       />,
     );
 
-    const primaryButton = screen.getByTestId('primary-button-id');
-    expect(primaryButton).toBeTruthy();
-    expect(primaryButton.props.style.width).toBe(325);
+    const secondaryButton = screen.getByTestId('secondary-button-id');
+    expect(secondaryButton).toBeTruthy();
+    expect(secondaryButton.props.style.width).toBe(325);
   });
   it('renders a width based on buttonWidth prop when provided', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         onPress={mockOnPress}
         title={buttonTitle}
         buttonWidth={100}
       />,
     );
 
-    const primaryButton = screen.getByTestId('primary-button-id');
-    expect(primaryButton).toBeTruthy();
-    expect(primaryButton.props.style.width).toBe(100);
+    const secondaryButton = screen.getByTestId('secondary-button-id');
+    expect(secondaryButton).toBeTruthy();
+    expect(secondaryButton.props.style.width).toBe(100);
   });
   it('renders a buttonWidth when a size prop and buttonWidth prop are provided', () => {
     render(
-      <PrimaryButton
+      <SecondaryButton
         onPress={mockOnPress}
         title={buttonTitle}
         buttonWidth={100}
@@ -137,8 +137,8 @@ describe('PrimaryButton', () => {
       />,
     );
 
-    const primaryButton = screen.getByTestId('primary-button-id');
-    expect(primaryButton).toBeTruthy();
-    expect(primaryButton.props.style.width).toBe(100);
+    const secondaryButton = screen.getByTestId('secondary-button-id');
+    expect(secondaryButton).toBeTruthy();
+    expect(secondaryButton.props.style.width).toBe(100);
   });
 });

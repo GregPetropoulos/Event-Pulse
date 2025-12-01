@@ -6,7 +6,6 @@ const useDeviceInfo = () => {
   // Determine orientation
   const isPortrait = height > width;
   const isLandscape = width > height;
-
   return {
     width,
     height,

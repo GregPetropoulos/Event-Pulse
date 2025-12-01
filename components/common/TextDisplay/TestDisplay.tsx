@@ -13,7 +13,7 @@ const TextDisplay = ({ children, style, ...props }: TextDisplayProps) => {
   const { theme } = useAppTheme();
   // Enforced base style
   const fixedTypographyStyles: TextStyle = {
-    ...theme.typography.title,
+    ...theme.typography.display,
   };
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (

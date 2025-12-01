@@ -42,9 +42,9 @@ describe('TextBody Component', () => {
 
     const textComponent = screen.getByText(testMessage);
     // Check if the typography styles from the mock theme are present
-    expect(textComponent.props.style[3].fontFamily).toBe(mockTheme.typography.title.fontFamily);
-    expect(textComponent.props.style[3].fontSize).toBe(mockTheme.typography.title.fontSize);
-    expect(textComponent.props.style[3].lineHeight).toBe(mockTheme.typography.title.lineHeight);
+    expect(textComponent.props.style[3].fontFamily).toBe(mockTheme.typography.body.fontFamily);
+    expect(textComponent.props.style[3].fontSize).toBe(mockTheme.typography.body.fontSize);
+    expect(textComponent.props.style[3].lineHeight).toBe(mockTheme.typography.body.lineHeight);
   });
 
   it('renders React nodes as children', () => {
