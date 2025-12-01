@@ -1,38 +1,40 @@
-import { StyleSheet, Text, View, Button, Platform, Alert, AppState} from 'react-native';
+import { StyleSheet, View, Button, Platform, AppState } from 'react-native';
 import React, { useState, useRef, useEffect } from 'react';
-// import { Link } from 'expo-router';
-import Link from '../common/Link/Link';
 import { AppleMaps, GoogleMaps } from 'expo-maps';
-import useDeviceInfo from '@/hooks/useDeviceInfo';
-import { locationList } from '@/__mocks__/LocationList';
+import TextBody from '../common/TextBody/TextBody';
+//! Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
+
+// Hooks
 import { useAppTheme } from '@/providers/ThemeProvider';
+import useDeviceInfo from '@/hooks/useDeviceInfo';
+import { useAppStore } from '@/store/useAppStore';
+
+// Types and Utils
+import { requestUserLocation, UserLocation } from '@/utils/location';
 import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
 import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
-import { requestUserLocation, openAppSettings, UserLocation } from '@/utils/location';
-import { ZOOM, NYC_DEFAULT } from '@/constants/locations';
-import { useIsFocused } from '@react-navigation/native';
-//! Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
+import { ZOOM, NYC_DEFAULT } from '@/constants/mapDefaults';
+import { locationList } from '@/__mocks__/mockLocationList';
 
 interface MapViewProps {
   locations: [];
 }
-
 interface MapProps {
   googleRef: any;
   appleRef: any;
   fullScreen: boolean;
-  cameraPosition: any;
+  // cameraPosition: any;
 }
-const Map = ({ googleRef, appleRef, fullScreen, cameraPosition }: MapProps) => {
+const Map = ({ googleRef, appleRef, fullScreen }: MapProps) => {
   const { width } = useDeviceInfo();
-
+  const userCoords = useAppStore((state) => state.userCoords);
   if (Platform.OS === 'ios') {
     return (
       <>
         <AppleMaps.View
           ref={appleRef}
           style={fullScreen ? StyleSheet.absoluteFill : { width, height: width / 1.4 }}
-          cameraPosition={cameraPosition}
+          cameraPosition={{ coordinates: userCoords ?? NYC_DEFAULT, zoom: ZOOM }}
         />
         {/* <View style={{ flex: 1 }}>{renderMapControls()}</View> */}
       </>
@@ -43,56 +45,54 @@ const Map = ({ googleRef, appleRef, fullScreen, cameraPosition }: MapProps) => {
         <GoogleMaps.View
           ref={googleRef}
           style={fullScreen ? StyleSheet.absoluteFill : { width, height: width / 1.4 }}
-          cameraPosition={cameraPosition}
+          cameraPosition={{ coordinates: userCoords ?? NYC_DEFAULT, zoom: ZOOM }}
         />
         {/* <View style={{ flex: 1 }}>{renderMapControls()}</View> */}
       </>
     );
   } else {
-    return <Text>Maps are only available on Android and iOS</Text>;
+    return <TextBody>Maps are only available on Android and iOS</TextBody>;
   }
 };
 
 const MapView = ({ locations }: MapViewProps) => {
   const { theme } = useAppTheme();
-  const [fullScreen, setFullScreen] = useState(false);
+  const updateUserLocation = useAppStore((state) => state.updateUserLocation);
+  const [fullScreen, setFullScreen] = useState(false); // TODO not implemented yet
   const [locationIndex, setLocationIndex] = useState(0);
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
-   const appState = useRef(AppState.currentState);
+  const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  const [cameraPosition, setCameraPosition] = useState<{ coordinates: UserLocation; zoom: number }>({ coordinates: NYC_DEFAULT, zoom: ZOOM });
   const [permissionDenied, setPermissionDenied] = useState(false);
-  const [refresh, setRefresh] = useState(false);
-  const focused = useIsFocused();
-  console.log('IS_FOCUSED', focused);
- //STOPPED HERE NEED TO WORK OUT THE AP STATE AND REREDMER NEW MAP CORRDINATES
+
+  // Permission / App Foreground handling in useEffect/side effects
   useEffect(() => {
     const getLocation = async () => {
       const loc = await requestUserLocation();
       if (!loc) {
         setPermissionDenied(true);
+        updateUserLocation(null);
         return;
       }
       setPermissionDenied(false);
-      setCameraPosition((prev) => ({ ...prev, coordinates: loc }));
+      updateUserLocation(loc);
     };
     getLocation();
-     const subscription = AppState.addEventListener('change', (nextAppState) => {
-      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        console.log('App has come to the foreground!');
-      }
+    const subscription = AppState.addEventListener('change', (nextAppState) => {
+      // if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      //   console.log('App has come to the foreground!');
+      // }
 
       appState.current = nextAppState;
       setAppStateVisible(appState.current);
-      console.log('AppState', appState.current);
     });
 
     return () => {
       subscription.remove();
     };
   }, [appStateVisible]);
-console.log('appStateVisible=====>',appStateVisible)
+
   // TODO ADVANCED MAP CONTROLS
   const renderMapControls = () => {
     return (
@@ -140,44 +140,13 @@ console.log('appStateVisible=====>',appStateVisible)
     // update after animation is triggered
     setLocationIndex(newIndex);
   };
-
-  // if (permissionDenied) {
-  //   Alert.alert('Location Permissions', ' Location permission is required to show nearby events. You can still browse manually.', [
-  //     {
-  //       text: 'Open Device Settings',
-  //       onPress: () => openAppSettings(),
-  //     },
-  //     {
-  //       text: 'Dismiss',
-  //       style: 'cancel',
-  //     },
-  //   ]);
-  // }
-  console.log(cameraPosition, permissionDenied);
-  const handleEnableSettingsLinking = () => {
-    // openAppSettings();
-    
-    // setRefresh((prev) => !prev);
-  };
   return (
     <>
       <Map
         googleRef={googleMapRef}
         appleRef={appleMapRef}
-        cameraPosition={cameraPosition}
         fullScreen={fullScreen}
       />
-      {/* !stopped here NEED THIS PERMISSION TO REFRESH SCREEN AFTER BE SET ON DEVICE SETTINFGS */}
-      {/* {permissionDenied && (
-        <Button
-          title='Enable settings location'
-          onPress={handleEnableSettingsLinking}
-        />
-       
-      )} */}
-        <Link href="/locationPermissionsModal">
-        Enable Location
-      </Link>
     </>
   );
 };
@@ -193,9 +162,9 @@ const styles = StyleSheet.create({
 
     // backgroundColor: 'red',
   },
-     link: {
+  link: {
     paddingVertical: 6,
-    margin:10,
+    margin: 10,
     fontSize: 20,
-  }
+  },
 });

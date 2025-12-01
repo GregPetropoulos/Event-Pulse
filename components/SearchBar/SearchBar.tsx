@@ -19,10 +19,11 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
     <View
       style={{
         ...styles.inputContainer,
+        borderRadius: theme.radius.sm,
         backgroundColor: theme.colors.surface,
         borderColor: isSearchFocused ? theme.colors.secondary : theme.colors.border,
         borderWidth: isSearchFocused ? 1.5 : 1,
-        marginHorizontal:theme.spacing.sm
+        marginHorizontal: theme.spacing.sm,
       }}>
       {!text && (
         <IconSymbol
@@ -39,8 +40,8 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
         value={value ?? text}
         onChangeText={onChange ?? setText}
         style={{
-          ...styles.input,
           ...theme.typography.body,
+          height: 40,
           color: theme.colors.secondary,
         }}
         onFocus={handleFocus}
@@ -62,17 +63,12 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
 
 const styles = StyleSheet.create({
   inputContainer: {
+    flex: 1,
+    // width:'100%',
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 8,
     paddingHorizontal: 10,
-    marginBottom: 10,
-    marginTop: 20,
-  },
-  input: {
-    marginLeft: 10,
-    height: 40,
-    flex: 1,
   },
 });
 export default SearchBar;
