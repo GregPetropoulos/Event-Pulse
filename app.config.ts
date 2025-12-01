@@ -45,21 +45,33 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     userInterfaceStyle: 'automatic',
     icon: icon,
     scheme: scheme,
-
+    owner: 'gregpetropoulosdev',
     extra: {
       env: environement,
       apiUrl: `${apiUrl}.gregpetropoulosdev.EventPulse.com`,
+      eas: {
+        projectId: '613dc567-c9e1-4f79-a5fa-44cd34b454b4',
+      },
     },
     ios: {
-      supportsTablet: true,
+      supportsTablet: false,
       bundleIdentifier: bundleIdentIfier,
       icon: {
         dark: icon,
         light: './assets/icons/ios/ios-light.png',
         tinted: './assets/icons/ios/ios-tinted.png',
       },
+      infoPlist: {
+        NSLocationWhenInUseUsageDescription: `${PRODUCT_NAME} needs your location to show nearby concerts and events.`,
+        NSLocationAlwaysAndWhenInUseUsageDescription: `Allow ${PRODUCT_NAME} to access your location for better event recommendations.`,
+      },
     },
     android: {
+      config: {
+        googleMaps: {
+          apiKey: process.env.GOOGLE_MAPS_ANDROID_SDK_KEY,
+        },
+      },
       adaptiveIcon: {
         foregroundImage: adaptiveIcon,
         monochromeImage: adaptiveIcon,
@@ -68,6 +80,12 @@ export default ({ config }: ConfigContext): ExpoConfig => {
       package: packageName,
       edgeToEdgeEnabled: true,
       predictiveBackGestureEnabled: false,
+      permissions: [
+        'ACCESS_COARSE_LOCATION',
+        'ACCESS_FINE_LOCATION',
+        // Not required unless you want background location
+        // "ACCESS_BACKGROUND_LOCATION"
+      ],
     },
     web: {
       output: 'static',
@@ -86,6 +104,20 @@ export default ({ config }: ConfigContext): ExpoConfig => {
             image: './assets/images/splash-icon.png',
             backgroundColor: '#000000',
           },
+        },
+      ],
+      [
+        'expo-maps',
+        {
+          requestLocationPermission: true,
+          locationPermission: `Allow ${PRODUCT_NAME} to use your location`,
+        },
+      ],
+      [
+        'expo-location',
+        {
+          locationAlwaysAndWhenInUsePermission: `Allow ${PRODUCT_NAME} to access your location for nearby events`,
+          locationWhenInUsePermission: `Allow ${PRODUCT_NAME} to show events near your current location.`,
         },
       ],
     ],
@@ -128,57 +160,3 @@ const getDynamicAppConfig = (environement: 'development' | 'preview' | 'producti
   };
 };
 
-// Starter boiler plate
-// =========================
-// =========================
-
-// {
-//   "expo": {
-//     "name": "EventPulse",
-//     "slug": "EventPulse",
-//     "version": "1.0.0",
-//     "orientation": "portrait",
-//     "icon": "./assets/images/icon.png",
-//     "scheme": "eventpulse",
-//     "userInterfaceStyle": "automatic",
-//     "newArchEnabled": true,
-//     "ios": {
-//       "supportsTablet": true,
-//       "bundleIdentifier": "com.gregpetropoulosdev.EventPulse"
-//     },
-//     "android": {
-//       "adaptiveIcon": {
-//         "backgroundColor": "#E6F4FE",
-//         "foregroundImage": "./assets/images/android-icon-foreground.png",
-//         "backgroundImage": "./assets/images/android-icon-background.png",
-//         "monochromeImage": "./assets/images/android-icon-monochrome.png"
-//       },
-//       "edgeToEdgeEnabled": true,
-//       "predictiveBackGestureEnabled": false,
-//       "package": "com.gregpetropoulosdev.EventPulse"
-//     },
-//     "web": {
-//       "output": "static",
-//       "favicon": "./assets/images/favicon.png"
-//     },
-//     "plugins": [
-//       "expo-router",
-//       [
-//         "expo-splash-screen",
-//         {
-//           "image": "./assets/images/splash-icon.png",
-//           "imageWidth": 200,
-//           "resizeMode": "contain",
-//           "backgroundColor": "#ffffff",
-//           "dark": {
-//             "backgroundColor": "#000000"
-//           }
-//         }
-//       ]
-//     ],
-//     "experiments": {
-//       "typedRoutes": true,
-//       "reactCompiler": true
-//     }
-//   }
-// }
