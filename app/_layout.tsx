@@ -66,8 +66,22 @@ export const RootNavigationWrapper = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name='locationPermissionsModal'
+            name='modals/LocationPermission'
             options={{ presentation: 'modal', title: 'Location Permissions' }}
+          />
+          <Stack.Screen
+            name='map'
+            options={{
+              headerBackTitle: 'Home',
+              headerSearchBarOptions: {
+                placeholder: 'search for events',
+                placement: 'automatic',
+                onChangeText: (e) => console.log('text from map search', e.nativeEvent.text),
+              },
+              title: 'Location',
+              animation: 'fade',
+              animationDuration: 1600,
+            }}
           />
         </Stack>
         <StatusBar style={theme.dark ? 'light' : 'dark'} />
