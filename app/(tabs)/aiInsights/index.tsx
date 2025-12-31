@@ -1,14 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import AIInsight from '@/components/screens/AIInsightScreen/AIInsightScreen';
 
-const AiInsights = () => {
-  return (
-    <View>
-      <Text>aiInsights</Text>
-    </View>
-  );
+const AiInsight = () => {
+  return <AIInsight />;
 };
-
-export default AiInsights;
-
-const styles = StyleSheet.create({});
+export default AiInsight;

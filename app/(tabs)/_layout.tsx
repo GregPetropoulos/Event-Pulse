@@ -1,8 +1,8 @@
 import { Tabs } from 'expo-router';
-import React from 'react';
 import { HapticTab } from '@/components/common/HapticTab';
 import { IconSymbol } from '@/components/common/IconSymbol';
 import { useAppTheme } from '@/providers/ThemeProvider';
+import { Easing } from 'react-native';
 
 export default function TabLayout() {
   const { theme } = useAppTheme();
@@ -13,6 +13,14 @@ export default function TabLayout() {
         tabBarInactiveTintColor: theme.colors.secondary,
         tabBarButton: HapticTab,
         headerShown: true,
+        animation: 'fade',
+        transitionSpec: {
+          animation: 'timing',
+          config: {
+            duration: 800,
+            easing: Easing.inOut(Easing.ease),
+          },
+        },
         headerStatusBarHeight: 10,
         headerTitleStyle: { color: theme.colors.textPrimary },
         headerStyle: { backgroundColor: theme.colors.primary },
