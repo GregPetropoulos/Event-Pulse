@@ -40,6 +40,7 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
         value={value ?? text}
         onChangeText={onChange ?? setText}
         style={{
+          width:'100%',
           ...theme.typography.body,
           height: 40,
           color: theme.colors.secondary,
@@ -64,7 +65,7 @@ const SearchBar = forwardRef<TextInput, SearchBarProps>(({ placeholder, onChange
 const styles = StyleSheet.create({
   inputContainer: {
     flex: 1,
-    // width:'100%',
+    width:'100%',
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 8,
