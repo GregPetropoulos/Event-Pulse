@@ -1,9 +1,10 @@
 import { AppleMaps, GoogleMaps } from 'expo-maps';
 import { useRef, useState } from 'react';
-import { Button, Platform, StyleSheet, View } from 'react-native';
+import { Button, Platform, StyleSheet, View, Pressable } from 'react-native';
 import TextBody from '../../../common/TextBody/TextBody';
+import { IconSymbol } from '@/components/common/IconSymbol';
+
 // Hooks
-import useDeviceInfo from '@/hooks/useDeviceInfo';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
 import { useRouter } from 'expo-router';
@@ -12,48 +13,61 @@ import { useRouter } from 'expo-router';
 import { locationList } from '@/__mocks__/mockLocationList';
 import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
 type MapViewProps = {
-  style: any;
+  style?: any;
 };
 
 //! Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
 
 const MapView = ({ style }: MapViewProps) => {
   const { theme } = useAppTheme();
-  const route = useRouter();
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
-  const { width } = useDeviceInfo();
-  // const {coordinates,zoom} = initialCameraPosition
-  const {userCoords,updateUserLocation} = useAppStore((state) => state);
+  const { userCoords } = useAppStore((state) => state);
   const [locationIndex, setLocationIndex] = useState(0);
-
-  const handleChangeWithRef = (direction: 'next' | 'prev') => {
+  const route = useRouter();
+  const initialCameraPosition = {
+    coordinates: userCoords ?? NYC_DEFAULT,
+    zoom: 14,
+  };
+  const handleChangeWithRef = (direction: 'next' | 'prev' | 'me') => {
     const newIndex = locationIndex + (direction === 'next' ? 1 : -1);
     const nextLocation = locationList[newIndex];
-    appleMapRef.current?.setCameraPosition({
-      coordinates: {
-        latitude: nextLocation.stores[0].point[0],
-        longitude: nextLocation.stores[0].point[1],
-      },
-      zoom: 14,
-    });
-    googleMapRef.current?.setCameraPosition({
-      coordinates: {
-        latitude: nextLocation.stores[0].point[0],
-        longitude: nextLocation.stores[0].point[1],
-      },
-      zoom: 14,
-    });
+    if (direction === 'me') {
+      appleMapRef.current?.setCameraPosition(initialCameraPosition);
+      googleMapRef.current?.setCameraPosition(initialCameraPosition);
+    } else {
+      appleMapRef.current?.setCameraPosition({
+        coordinates: {
+          latitude: nextLocation.stores[0].point[0],
+          longitude: nextLocation.stores[0].point[1],
+        },
+        zoom: 14,
+      });
+      googleMapRef.current?.setCameraPosition({
+        coordinates: {
+          latitude: nextLocation.stores[0].point[0],
+          longitude: nextLocation.stores[0].point[1],
+        },
+        zoom: 14,
+      });
+    }
     // update after animation is triggered
     setLocationIndex(newIndex);
+  };
+  const handleNavToMapScreen = () => {
+    route.navigate('../map');
+  };
+  const handleLocationPermissionModal = () => {
+    route.navigate('/modals/LocationPermission');
   };
   const renderMapControls = () => {
     return (
       <>
         <View
-          // style={{ flex: 8 }}
+          style={{ flex: 1 }}
           pointerEvents='none'
         />
         <View
@@ -61,35 +75,60 @@ const MapView = ({ style }: MapViewProps) => {
           pointerEvents='auto'>
           <Button
             title='Prev'
+            color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('prev')}
           />
           <Button
             title='Next'
+            color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('next')}
           />
           <Button
-            title='Home'
-            onPress={() => route.navigate('/')}
+            title='Me'
+            color={theme.colors.textPrimary}
+            onPress={() => handleChangeWithRef('me')}
           />
+          <Pressable onPress={handleLocationPermissionModal}>
+            {userCoords ? (
+              <IconSymbol
+                name='mappin'
+                color={theme.colors.success}
+              />
+            ) : (
+              <IconSymbol
+                name='mappin.slash'
+                color={theme.colors.error}
+              />
+            )}
+          </Pressable>
+          <Pressable onPress={handleNavToMapScreen}>
+            <IconSymbol
+              name='map.fill'
+              color={theme.colors.textPrimary}
+            />
+          </Pressable>
         </View>
       </>
     );
   };
-  const initialCameraPosition = {
-    coordinates: userCoords ?? { latitude: undefined, longitude: undefined },
-    zoom: 14,
-  };
-   
+
   if (Platform.OS === 'ios') {
     return (
       <>
         <AppleMaps.View
           ref={appleMapRef}
           style={StyleSheet.absoluteFill}
+          uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
+          properties={{ isMyLocationEnabled: true }}
           // style={{ flex: 1 }}
           cameraPosition={initialCameraPosition}
         />
-        {/* <View style={{ flex: 1 }}>{renderMapControls()}</View> */}
+        <View
+          style={{
+            flex: 1,
+          }}>
+          {renderMapControls()}
+        </View>
       </>
     );
   } else if (Platform.OS === 'android') {
@@ -98,6 +137,8 @@ const MapView = ({ style }: MapViewProps) => {
         <GoogleMaps.View
           ref={googleMapRef}
           style={StyleSheet.absoluteFill}
+          uiSettings={{ compassEnabled: true }}
+          properties={{ isMyLocationEnabled: true }}
           cameraPosition={initialCameraPosition}
         />
         {/* <View style={{ flex: 1 }}>{renderMapControls()}</View> */}
@@ -113,7 +154,7 @@ const styles = StyleSheet.create({
   controlsContainer: {
     // flex: 1,
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     alignItems: 'center',
     gap: 8,
   },

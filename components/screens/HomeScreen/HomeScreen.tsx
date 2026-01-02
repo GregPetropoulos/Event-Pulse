@@ -1,11 +1,9 @@
 import { useRouter } from 'expo-router';
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Keyboard, Pressable, Text, TextInput, TouchableWithoutFeedback, View, FlatList, AppState } from 'react-native';
 
 import MapView from '../MapScreen/MapView/MapView';
 import SearchBar from '@/components/SearchBar/SearchBar';
-import SecondaryButton from '@/components/common/SecondaryButton/SecondaryButton';
-import PrimaryButton from '@/components/common/PrimaryButton/PrimaryButton';
 
 // Hooks
 import useDeviceInfo from '@/hooks/useDeviceInfo';
@@ -16,7 +14,6 @@ import { getUserLocation } from '@/utils/location';
 
 // Utils & Types
 import { cardData } from '@/__mocks__/mockCardData';
-import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -25,12 +22,12 @@ export default function HomeScreen() {
   const { width } = useDeviceInfo();
   const searchRef = useRef<TextInput>(null);
   const { theme } = useAppTheme();
-  const { userCoords, updateUserLocation } = useAppStore((state) => state);
-
+  const { updateUserLocation } = useAppStore((state) => state);
+ 
   // =====================
   // Side effects for Focus, Blur, and active/inactive app in background when permissions set on device settings
   // =====================
-  
+
   // Handle search blur on navigation away (triggers onBlur if focused)
   useEffect(() => {
     const blurListener = navigation.addListener('blur', () => {
@@ -69,16 +66,12 @@ export default function HomeScreen() {
       updateUserLocation(result.location);
     } else {
       // Handle "no permission" mode – maybe default to a fallback location
-      updateUserLocation(NYC_DEFAULT); // NYC fallback
+      updateUserLocation(null); // NYC fallback
     }
   };
 
-  const handleLocationPermissionModal = () => {
-    route.navigate('/modals/LocationPermission');
-  };
-  const handleNavToMapScreen = () => {
-    route.navigate('../map');
-  };
+ 
+ 
   const renderItem = ({ item }: { item: { id: number; title: string } }) => {
     return (
       <Pressable onPress={() => console.log('card press')}>
@@ -89,14 +82,11 @@ export default function HomeScreen() {
     );
   };
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
-        <SearchBar ref={searchRef} />
-        <SecondaryButton
-          title={`Map ${userCoords?.latitude === NYC_DEFAULT.latitude || userCoords === null ? 'Off' : 'On'}`}
-          size={'sm'}
-          onPress={handleLocationPermissionModal}
-        />
+    <View 
+    style={{ flex: 1 }}
+    >
+      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' ,margin:6}}>
+      <SearchBar ref={searchRef} />
       </View>
       <TouchableWithoutFeedback
         onPress={() => {
@@ -109,13 +99,10 @@ export default function HomeScreen() {
         <View style={{ flex: 1, backgroundColor: 'red' }}>
           <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <View style={{ flex: 1 }}>
-              <MapView style={{ flex: 1 }} />
+              <MapView
+              />
             </View>
             <View style={{ flex: 1 }}>
-              <PrimaryButton
-                title='Full Map'
-                onPress={handleNavToMapScreen}
-              />
               <FlatList
                 data={cardData}
                 renderItem={renderItem}

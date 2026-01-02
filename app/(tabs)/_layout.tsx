@@ -30,6 +30,7 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: 'Home',
+        
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}

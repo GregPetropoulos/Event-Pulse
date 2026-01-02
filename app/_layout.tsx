@@ -73,9 +73,10 @@ export const RootNavigationWrapper = () => {
             name='map'
             options={{
               headerBackTitle: 'Home',
+              
               headerSearchBarOptions: {
                 placeholder: 'search for events',
-                placement: 'automatic',
+                placement:'stacked',
                 onChangeText: (e) => console.log('text from map search', e.nativeEvent.text),
               },
               title: 'Location',
