@@ -1,16 +1,12 @@
 import SearchBar from '../SearchBar';
-import { fireEvent, render } from '@testing-library/react-native';
-import { mockTheme } from '../../../__mocks__/mockTheme';
-
-jest.mock('@/providers/ThemeProvider', () => ({
-  useAppTheme: () => ({ theme: mockTheme }),
-}));
+import { fireEvent } from '@testing-library/react-native';
+import { renderScreen } from '../../../test/helpers/renderScreen';
 
 describe('SearchBar', () => {
   it('renders placeholder and updates input text', () => {
     const mockOnChange = jest.fn();
 
-    const { getByPlaceholderText, getByTestId } = render(
+    const { getByPlaceholderText, getByTestId } = renderScreen(
       <SearchBar
         value=''
         placeholder='Search for events by city'

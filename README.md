@@ -266,6 +266,7 @@ When you present this app to potential employers:
 - npm test
 - npm test -- --watch
 - npx jest --clearCache
+- rm -rf node_modules/.cache
 
 ### Quick Clear Cache
 
