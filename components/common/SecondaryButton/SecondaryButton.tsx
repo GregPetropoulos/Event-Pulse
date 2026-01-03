@@ -16,9 +16,10 @@ const SecondaryButton = ({ title, onPress, buttonWidth, size }: SecondaryButtonP
   const { width, isLandscape } = useDeviceInfo();
   return (
     <Pressable
+      accessibilityLabel='secondary button'
+      accessibilityRole='button'
       testID='secondary-button-id'
       onPress={onPress}
-      accessibilityLabel='secondary button'
       style={{
         width: buttonWidth
           ? buttonWidth

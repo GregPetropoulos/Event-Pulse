@@ -141,4 +141,15 @@ describe('PrimaryButton', () => {
     expect(primaryButton).toBeTruthy();
     expect(primaryButton.props.style.width).toBe(100);
   });
+  it('Primary Button is accessible by role', () => {
+    const mockOnPress = jest.fn();
+    render(
+      <PrimaryButton
+        onPress={mockOnPress}
+        title={buttonTitle}
+      />,
+    );
+    const getByRole = screen.getByRole('button');
+    expect(getByRole).toBeTruthy();
+  });
 });

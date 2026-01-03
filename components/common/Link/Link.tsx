@@ -13,6 +13,7 @@ const Link = (props: LinkProps & CustomLinkProps & TextStyle&PressableProps) => 
   return (
     <ExpoLink href={props.href} target={props.target} asChild>
       <Pressable
+      accessibilityRole="link"
         testID={props.testID ?? 'common-link-id'}
         // style={{
         //   ...styles.link,

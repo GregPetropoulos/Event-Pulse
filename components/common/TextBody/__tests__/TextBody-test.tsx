@@ -54,4 +54,11 @@ describe('TextBody Component', () => {
     // Check if the nested text is rendered
     expect(screen.getByText('Nested text')).toBeOnTheScreen();
   });
+  it('TextBody is accessible by role', () => {
+    render(
+      <TextBody>Hello World</TextBody>,
+    );
+    const getByRole = screen.getByRole('text');
+    expect(getByRole).toBeTruthy();
+  });
 });

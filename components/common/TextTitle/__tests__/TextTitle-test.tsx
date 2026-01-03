@@ -54,4 +54,11 @@ describe('TextTitle Component', () => {
     // Check if the nested text is rendered
     expect(screen.getByText('Nested text')).toBeOnTheScreen();
   });
+    it('TextTitle is accessible by role', () => {
+    render(
+      <TextTitle>Hello World</TextTitle>,
+    );
+    const getByRole = screen.getByRole('text');
+    expect(getByRole).toBeTruthy();
+  });
 });

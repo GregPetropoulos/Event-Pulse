@@ -19,6 +19,8 @@ const TextBody = ({ children, style, ...props }: TextBodyProps) => {
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (
     <Text
+      accessibilityLabel='TextBody'
+      accessibilityRole='text'
       style={[
         styles.defaultStyles,
         defaultColorStyle,

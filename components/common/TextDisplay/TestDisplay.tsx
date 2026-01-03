@@ -18,6 +18,8 @@ const TextDisplay = ({ children, style, ...props }: TextDisplayProps) => {
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (
     <Text
+     accessibilityLabel='TextDisplay'
+      accessibilityRole='text'
       style={[
         styles.defaultStyles,
         defaultColorStyle,

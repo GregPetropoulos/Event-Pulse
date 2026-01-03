@@ -16,6 +16,8 @@ const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps
   const { width, isLandscape } = useDeviceInfo();
   return (
     <Pressable
+      accessibilityLabel='primary button'
+      accessibilityRole='button'
       testID='primary-button-id'
       onPress={onPress}
       style={{

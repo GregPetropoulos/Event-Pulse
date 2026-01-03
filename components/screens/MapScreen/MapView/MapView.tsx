@@ -74,21 +74,27 @@ const MapView = ({ style }: MapViewProps) => {
           style={{ ...styles.controlsContainer, backgroundColor: theme.colors.surface }}
           pointerEvents='auto'>
           <Button
+            accessibilityLabel='Previous Button'
             title='Prev'
             color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('prev')}
           />
           <Button
+            accessibilityLabel='Next Button'
             title='Next'
             color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('next')}
           />
           <Button
+            accessibilityLabel='Me Button'
             title='Me'
             color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('me')}
           />
-          <Pressable onPress={handleLocationPermissionModal}>
+          <Pressable
+            accessibilityLabel='Location on and off'
+            accessibilityRole='button'
+            onPress={handleLocationPermissionModal}>
             {userCoords ? (
               <IconSymbol
                 name='mappin'
@@ -101,7 +107,10 @@ const MapView = ({ style }: MapViewProps) => {
               />
             )}
           </Pressable>
-          <Pressable onPress={handleNavToMapScreen}>
+          <Pressable
+            accessibilityLabel='Expand Map Button'
+            accessibilityRole='button'
+            onPress={handleNavToMapScreen}>
             <IconSymbol
               name='map.fill'
               color={theme.colors.textPrimary}
@@ -145,7 +154,13 @@ const MapView = ({ style }: MapViewProps) => {
       </>
     );
   } else {
-    return <TextBody>Maps are only available on Android and iOS</TextBody>;
+    return (
+      <TextBody
+        accessibilityLabel='Text Body'
+        accessibilityRole='text'>
+        Maps are only available on Android and iOS
+      </TextBody>
+    );
   }
 };
 

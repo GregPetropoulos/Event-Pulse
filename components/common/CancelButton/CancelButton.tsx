@@ -18,6 +18,7 @@ const CancelButton = ({ title, onPress, size, buttonWidth }: CancelButtonProps) 
     <Pressable
       testID='cancel-button-id'
        accessibilityLabel='cancel button'
+       accessibilityRole='button'
       style={{
         width: buttonWidth
           ? buttonWidth

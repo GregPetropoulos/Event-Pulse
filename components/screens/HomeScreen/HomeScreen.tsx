@@ -74,7 +74,10 @@ export default function HomeScreen() {
  
   const renderItem = ({ item }: { item: { id: number; title: string } }) => {
     return (
-      <Pressable onPress={() => console.log('card press')}>
+      <Pressable
+      accessibilityLabel='Event Card Item'
+      accessibilityRole='button'
+      onPress={() => console.log('card press')}>
         <View>
           <Text style={{ ...theme.typography.body, color: theme.colors.primary }}>{item.title}</Text>
         </View>
