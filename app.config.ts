@@ -159,4 +159,3 @@ const getDynamicAppConfig = (environement: 'development' | 'preview' | 'producti
     scheme: `${SCHEME}-dev`,
   };
 };
-

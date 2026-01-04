@@ -7,13 +7,16 @@ interface CustomLinkProps {
   width?: number;
 }
 
-const Link = (props: LinkProps & CustomLinkProps & TextStyle&PressableProps) => {
+const Link = (props: LinkProps & CustomLinkProps & TextStyle & PressableProps) => {
   const { theme } = useAppTheme();
 
   return (
-    <ExpoLink href={props.href} target={props.target} asChild>
+    <ExpoLink
+      href={props.href}
+      target={props.target}
+      asChild>
       <Pressable
-      accessibilityRole="link"
+        accessibilityRole='link'
         testID={props.testID ?? 'common-link-id'}
         // style={{
         //   ...styles.link,
@@ -27,9 +30,7 @@ const Link = (props: LinkProps & CustomLinkProps & TextStyle&PressableProps) => 
         //   width: props.width,
         // }}
       >
-        <Text style={{ color: props.color ?? theme.colors.textPrimary, textAlign:props.textAlign?? 'center'}}>
-          {props.children}
-        </Text>
+        <Text style={{ color: props.color ?? theme.colors.textPrimary, textAlign: props.textAlign ?? 'center' }}>{props.children}</Text>
       </Pressable>
     </ExpoLink>
   );

@@ -2,7 +2,9 @@ import React from 'react';
 import { Pressable, Text } from 'react-native';
 
 export const Link = ({ children, testID, onPress }: any) => (
-  <Pressable testID={testID} onPress={onPress}>
+  <Pressable
+    testID={testID}
+    onPress={onPress}>
     <Text>{children}</Text>
   </Pressable>
 );
@@ -14,7 +16,7 @@ export const useRouter = () => ({
   push: jest.fn(),
   replace: jest.fn(),
   back: jest.fn(),
-  setParams:jest.fn()
+  setParams: jest.fn(),
 });
 
 export const useNavigation = () => ({

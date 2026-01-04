@@ -15,7 +15,7 @@ const TextTitle = ({ children, style, ...props }: TextTitleProps) => {
   const fixedTypographyStyles: TextStyle = {
     ...theme.typography.title,
   };
-  
+
   const defaultColorStyle: TextStyle = { color: theme.colors.textPrimary };
   return (
     <Text

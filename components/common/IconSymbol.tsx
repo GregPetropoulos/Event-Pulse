@@ -22,13 +22,13 @@ const MAPPING = {
   'safari.fill': 'explore',
   'info.circle': 'info-outline',
   'gearshape.fill': 'settings',
-  'magnifyingglass': 'search',
+  magnifyingglass: 'search',
   'chevron.left.forwardslash.chevron.right': 'code',
   'chevron.right': 'chevron-right',
   'chevron.left': 'chevron-left',
-  'map.fill':'map',
-  "mappin.slash":'location-off',
-  'mappin':'location-on'
+  'map.fill': 'map',
+  'mappin.slash': 'location-off',
+  mappin: 'location-on',
 } as IconMapping;
 
 /**

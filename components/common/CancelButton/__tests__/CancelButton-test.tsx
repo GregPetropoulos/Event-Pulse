@@ -118,11 +118,10 @@ describe('CancelButton', () => {
     // Check if the mock function was called exactly once
     expect(mockOnPress).toHaveBeenCalledTimes(1);
   });
-  it('Cancel Button is accessible by role',()=>{
+  it('Cancel Button is accessible by role', () => {
     const mockOnPress = jest.fn();
-    render(<CancelButton onPress={mockOnPress}/>)
-    const getByRole = screen.getByRole('button')
+    render(<CancelButton onPress={mockOnPress} />);
+    const getByRole = screen.getByRole('button');
     expect(getByRole).toBeTruthy();
-
-  })
+  });
 });

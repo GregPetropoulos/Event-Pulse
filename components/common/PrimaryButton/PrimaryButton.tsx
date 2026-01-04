@@ -21,7 +21,7 @@ const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps
       testID='primary-button-id'
       onPress={onPress}
       style={{
-         width: buttonWidth
+        width: buttonWidth
           ? buttonWidth
           : size === 'xs'
             ? width / 4

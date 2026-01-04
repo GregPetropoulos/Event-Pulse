@@ -6,7 +6,7 @@ const FavoritesScreen = () => {
   const { theme } = useAppTheme();
   return (
     <View style={{ backgroundColor: 'green' }}>
-      <TextBody style={{ color: 'red'}}>My Favorites</TextBody>
+      <TextBody style={{ color: 'red' }}>My Favorites</TextBody>
     </View>
   );
 };

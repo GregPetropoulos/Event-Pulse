@@ -256,7 +256,6 @@ When you present this app to potential employers:
 
 - `eas build --local`: Runs any eas build command on your local machine instead of on EAS servers. This is helpful for debugging build failures or for local testing.
 
-
 ### Metro for Local
 
 - npx expo start --clear

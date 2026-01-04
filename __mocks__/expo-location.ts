@@ -1,5 +1,5 @@
 export const getForegroundPermissionsAsync = jest.fn().mockResolvedValue({
-  status: "granted",
+  status: 'granted',
 });
 
 export const requestForegroundPermissionsAsync = jest.fn();

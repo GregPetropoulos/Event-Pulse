@@ -1,5 +1,5 @@
 import { render, screen } from '@testing-library/react-native';
-import TextDisplay from '../TestDisplay'
+import TextDisplay from '../TestDisplay';
 import { mockTheme } from '../../../../__mocks__/mockTheme';
 
 jest.mock('@/providers/ThemeProvider', () => ({
@@ -54,10 +54,8 @@ describe('TextDisplay Component', () => {
     // Check if the nested text is rendered
     expect(screen.getByText('Nested text')).toBeOnTheScreen();
   });
-   it('TextDisplay is accessible by role', () => {
-    render(
-      <TextDisplay>Hello World</TextDisplay>,
-    );
+  it('TextDisplay is accessible by role', () => {
+    render(<TextDisplay>Hello World</TextDisplay>);
     const getByRole = screen.getByRole('text');
     expect(getByRole).toBeTruthy();
   });

@@ -1,5 +1,5 @@
 import React from 'react';
-import MapScreen from '../MapScreen'
+import MapScreen from '../MapScreen';
 import { renderScreen } from '../../../../test/helpers/renderScreen';
 
 describe('MapScreen', () => {

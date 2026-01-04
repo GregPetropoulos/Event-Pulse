@@ -23,7 +23,7 @@ export default function HomeScreen() {
   const searchRef = useRef<TextInput>(null);
   const { theme } = useAppTheme();
   const { updateUserLocation } = useAppStore((state) => state);
- 
+
   // =====================
   // Side effects for Focus, Blur, and active/inactive app in background when permissions set on device settings
   // =====================
@@ -70,14 +70,12 @@ export default function HomeScreen() {
     }
   };
 
- 
- 
   const renderItem = ({ item }: { item: { id: number; title: string } }) => {
     return (
       <Pressable
-      accessibilityLabel='Event Card Item'
-      accessibilityRole='button'
-      onPress={() => console.log('card press')}>
+        accessibilityLabel='Event Card Item'
+        accessibilityRole='button'
+        onPress={() => console.log('card press')}>
         <View>
           <Text style={{ ...theme.typography.body, color: theme.colors.primary }}>{item.title}</Text>
         </View>
@@ -85,11 +83,9 @@ export default function HomeScreen() {
     );
   };
   return (
-    <View 
-    style={{ flex: 1 }}
-    >
-      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' ,margin:6}}>
-      <SearchBar ref={searchRef} />
+    <View style={{ flex: 1 }}>
+      <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', margin: 6 }}>
+        <SearchBar ref={searchRef} />
       </View>
       <TouchableWithoutFeedback
         onPress={() => {
@@ -102,8 +98,7 @@ export default function HomeScreen() {
         <View style={{ flex: 1, backgroundColor: 'red' }}>
           <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
             <View style={{ flex: 1 }}>
-              <MapView
-              />
+              <MapView />
             </View>
             <View style={{ flex: 1 }}>
               <FlatList

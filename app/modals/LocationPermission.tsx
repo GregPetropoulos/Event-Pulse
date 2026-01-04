@@ -1,7 +1,7 @@
-import LocationPermissionsModal from "@/components/modals/LocationPermissionsModal";
+import LocationPermissionsModal from '@/components/modals/LocationPermissionsModal';
 
-const LocationPermission =()=>{
+const LocationPermission = () => {
   // Can modulate as more modals are needed
-  return <LocationPermissionsModal/>
-}
+  return <LocationPermissionsModal />;
+};
 export default LocationPermission;
