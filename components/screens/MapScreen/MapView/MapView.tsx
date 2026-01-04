@@ -7,7 +7,7 @@ import { IconSymbol } from '@/components/common/IconSymbol';
 // Hooks
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
-import { useRouter } from 'expo-router';
+import { useRouter, usePathname } from 'expo-router';
 
 // Types and Utils
 import { locationList } from '@/__mocks__/mockLocationList';
@@ -15,19 +15,16 @@ import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
 import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
-type MapViewProps = {
-  style?: any;
-};
-
 //! Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
 
-const MapView = ({ style }: MapViewProps) => {
+const MapView = () => {
   const { theme } = useAppTheme();
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
   const { userCoords } = useAppStore((state) => state);
   const [locationIndex, setLocationIndex] = useState(0);
   const route = useRouter();
+  const pathname = usePathname();
   const initialCameraPosition = {
     coordinates: userCoords ?? NYC_DEFAULT,
     zoom: 14,
@@ -57,19 +54,25 @@ const MapView = ({ style }: MapViewProps) => {
     // update after animation is triggered
     setLocationIndex(newIndex);
   };
+
   const handleNavToMapScreen = () => {
-    route.navigate('../map');
+    if (pathname === '/map') {
+      route.back();
+    } else {
+      route.navigate('/map');
+    }
   };
+
   const handleLocationPermissionModal = () => {
     route.navigate('/modals/LocationPermission');
   };
   const renderMapControls = () => {
     return (
-      <>
-        <View
-          style={{ flex: 1 }}
+      <View>
+        {/* <View
+          style={{ flex: 1, borderColor:'green', borderWidth:2 }}
           pointerEvents='none'
-        />
+          /> */}
         <View
           style={{ ...styles.controlsContainer, backgroundColor: theme.colors.surface }}
           pointerEvents='auto'>
@@ -117,48 +120,51 @@ const MapView = ({ style }: MapViewProps) => {
             />
           </Pressable>
         </View>
-      </>
+      </View>
     );
   };
 
   if (Platform.OS === 'ios') {
     return (
-      <>
-        <AppleMaps.View
-          ref={appleMapRef}
-          style={StyleSheet.absoluteFill}
-          uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
-          properties={{ isMyLocationEnabled: true }}
-          // style={{ flex: 1 }}
-          cameraPosition={initialCameraPosition}
-        />
-        <View
-          style={{
-            flex: 1,
-          }}>
-          {renderMapControls()}
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <AppleMaps.View
+            ref={appleMapRef}
+            style={StyleSheet.absoluteFill}
+            uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
+            properties={{ isMyLocationEnabled: true }}
+            cameraPosition={initialCameraPosition}
+          />
         </View>
-      </>
+        {renderMapControls()}
+      </View>
     );
   } else if (Platform.OS === 'android') {
     return (
-      <>
-        <GoogleMaps.View
-          ref={googleMapRef}
-          style={StyleSheet.absoluteFill}
-          uiSettings={{ compassEnabled: true }}
-          properties={{ isMyLocationEnabled: true }}
-          cameraPosition={initialCameraPosition}
-        />
-        {/* <View style={{ flex: 1 }}>{renderMapControls()}</View> */}
-      </>
+      <View style={{ flex: 1 }}>
+        <View style={{ flex: 1 }}>
+          <GoogleMaps.View
+            ref={googleMapRef}
+            style={StyleSheet.absoluteFill}
+            uiSettings={{ compassEnabled: true }}
+            properties={{ isMyLocationEnabled: true }}
+            cameraPosition={initialCameraPosition}
+          />
+        </View>
+        {renderMapControls()}
+      </View>
     );
   } else {
     return (
       <TextBody
+        style={{
+          flex: 1,
+          marginVertical: theme.spacing.lg,
+          textAlign: 'center',
+        }}
         accessibilityLabel='Text Body'
         accessibilityRole='text'>
-        Maps are only available on Android and iOS
+        Maps are only available on Android and iOS ☹️
       </TextBody>
     );
   }
@@ -167,10 +173,9 @@ const MapView = ({ style }: MapViewProps) => {
 export default MapView;
 const styles = StyleSheet.create({
   controlsContainer: {
-    // flex: 1,
+    paddingVertical: 2,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    gap: 8,
   },
 });

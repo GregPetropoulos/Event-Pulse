@@ -72,14 +72,16 @@ export const RootNavigationWrapper = () => {
           <Stack.Screen
             name='map'
             options={{
-              headerBackTitle: 'Home',
-
+              headerBackVisible: false,
+              headerTransparent: true,
+              headerShown: true,
+              // TODO FINE TUNE THE HEADERFOCUS/BLUR
               headerSearchBarOptions: {
                 placeholder: 'search for events',
                 placement: 'stacked',
                 onChangeText: (e) => console.log('text from map search', e.nativeEvent.text),
               },
-              title: 'Location',
+              title: '',
               animation: 'fade',
               animationDuration: 1600,
             }}

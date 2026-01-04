@@ -13,11 +13,11 @@ export default function TabLayout() {
         tabBarInactiveTintColor: theme.colors.secondary,
         tabBarButton: HapticTab,
         headerShown: true,
-        animation: 'fade',
+        animation: 'shift',
         transitionSpec: {
           animation: 'timing',
           config: {
-            duration: 800,
+            duration: 500,
             easing: Easing.inOut(Easing.ease),
           },
         },
@@ -28,9 +28,18 @@ export default function TabLayout() {
       <Tabs.Screen
         name='(home)/index'
         options={{
-          headerShown: false,
+          headerShown: true,
+          headerTintColor: theme.colors.textPrimary,
+          headerStyle: { backgroundColor: theme.colors.surface },
+          headerSearchBarOptions: {
+            cancelButtonText: 'Cancel',
+            placeholder: 'search for events',
+            autoCapitalize: 'none',
+            inputType: 'text',
+            onChangeText: (e) => console.log('text from map search', e.nativeEvent.text),
+          },
           title: 'Home',
-
+          animation: 'fade',
           tabBarIcon: ({ color }) => (
             <IconSymbol
               size={28}

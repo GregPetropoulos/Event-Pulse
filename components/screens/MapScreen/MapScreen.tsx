@@ -3,5 +3,5 @@ import { ActivityIndicator } from 'react-native';
 import MapView from './MapView/MapView';
 
 export default function MapScreen() {
-  return <MapView style={{ flex: 1 }}>{/* <Marker coordinate={coords} /> */}</MapView>;
+  return <MapView >{/* <Marker coordinate={coords} /> */}</MapView>;
 }
