@@ -5,9 +5,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
+      "@/*": ["src/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts,", "eslint.config.js", "expo-env.d.ts", "__mocks__/"],
+  "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts,", "eslint.config.js", "expo-env.d.ts", "src/test/mocks"],
   "exclude": ["node_modules", "**/__tests__/**"]
 }

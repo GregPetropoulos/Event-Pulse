@@ -1,7 +1,7 @@
-import { Tabs } from 'expo-router';
-import { HapticTab } from '@/components/common/HapticTab';
-import { IconSymbol } from '@/components/common/IconSymbol';
+import { HapticTab } from '@/components/common/Haptics/HapticTab';
+import { IconSymbol } from '@/components/common/Icon/IconSymbol';
 import { useAppTheme } from '@/providers/ThemeProvider';
+import { Tabs } from 'expo-router';
 import { Easing } from 'react-native';
 
 export default function TabLayout() {
@@ -50,7 +50,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='aiInsights'
+        name='aiInsights/index'
         options={{
           title: 'AI Insights',
           tabBarIcon: ({ color }) => (
@@ -64,7 +64,7 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name='favorites'
+        name='favorites/index'
         options={{
           title: 'Favs',
           tabBarIcon: ({ color }) => (
@@ -77,7 +77,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='about'
+        name='about/index'
         options={{
           title: 'About',
           tabBarIcon: ({ color }) => (
@@ -90,7 +90,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name='settings'
+        name='settings/index'
         options={{
           title: 'Settings',
           tabBarIcon: ({ color }) => (

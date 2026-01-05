@@ -1,4 +1,4 @@
-import AboutScreen from '@/components/screens/AboutScreen/AboutScreen';
+import AboutScreen from '@/screens/AboutScreen/AboutScreen';
 
 const About = () => {
   return <AboutScreen />;

@@ -1,11 +1,11 @@
+import { ThemeProvider, useAppTheme } from '@/providers/ThemeProvider';
+import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
-import { ThemeProvider, useAppTheme } from '@/providers/ThemeProvider';
-import { StatusBar } from 'expo-status-bar';
-import * as SplashScreen from 'expo-splash-screen';
 
 SplashScreen.setOptions({
   duration: 4000,

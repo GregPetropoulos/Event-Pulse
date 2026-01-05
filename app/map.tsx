@@ -1,4 +1,4 @@
-import MapScreen from '@/components/screens/MapScreen/MapScreen';
+import MapScreen from '@/screens/MapScreen/MapScreen';
 const Map = () => {
   return <MapScreen />;
 };
