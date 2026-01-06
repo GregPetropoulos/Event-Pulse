@@ -8,7 +8,7 @@ import { StyleSheet, View } from 'react-native';
 import { useAppTheme } from '@/providers/ThemeProvider';
 
 // Utils And Types
-import { openAppSettings } from '@/utils/location';
+import { openAppSettings } from '@/features/location/locationService';
 
 export default function LocationPermissionsModalScreen() {
   const { theme } = useAppTheme();

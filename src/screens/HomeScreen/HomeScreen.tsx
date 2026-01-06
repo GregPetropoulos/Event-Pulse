@@ -6,7 +6,9 @@ import Map from '../../components/Map/Map';
 // Hooks
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
-import { getUserLocation } from '@/utils/location';
+
+// Service
+import { getUserLocation } from '@/features/location/locationService';
 
 // Utils & Types
 import { cardData } from '@/test/mocks/mockCardData';
