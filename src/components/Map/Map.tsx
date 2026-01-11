@@ -8,6 +8,7 @@ import TextBody from '../common/Typography/TextBody/TextBody';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
 import { usePathname, useRouter } from 'expo-router';
+import { useEvents } from '@/features/events/hooks';
 
 // Types and Utils
 import { locationList } from '@/test/mocks/mockLocationList';
@@ -15,13 +16,19 @@ import { NYC_DEFAULT } from '@/constants/mapDefaults';
 import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
 
-//! Will need to configure thie for android https://docs.expo.dev/versions/latest/sdk/maps/
+//! Will need to configure this for android https://docs.expo.dev/versions/latest/sdk/maps/
 
 const Map = () => {
   const { theme } = useAppTheme();
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
   const { userCoords } = useAppStore((state) => state);
+  const { data, isLoading, error } = useEvents({
+    lat: userCoords?.latitude ?? 0,
+    lng: userCoords?.longitude ?? 0,
+    radius: 10,
+  }); 
+  console.log('useEvents Hook --> Data', data);
   const [locationIndex, setLocationIndex] = useState(0);
   const route = useRouter();
   const pathname = usePathname();

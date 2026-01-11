@@ -269,19 +269,20 @@ When you present this app to potential employers:
 
 ### Quick Clear Cache
 
-<!-- TODO MAKE THIS A CLEAR CACHE SCRIPT -->
-
 [expo cli clear cache](https://docs.expo.dev/troubleshooting/clear-cache-windows/#expo-cli-and-npm)
-
 - rm -rf node_modules
 - npm cache clean --force
 - npm install
 - watchman watch-del-all
-  <!-- - rm -fr $TMPDIR/haste-map-* -->
-  <!-- - rm -rf $TMPDIR/metro-cache -->
-- del %localappdata%Temphaste-map-\*
-- del %localappdata%Tempmetro-cache
+- rm -fr $TMPDIR/haste-map-*
+- rm -rf $TMPDIR/metro-cache
 - npx expo start --clear
+
+## OR
+
+- npm run reste:cache
+- npx expo start --clear
+
 
 ## Troubleshooting
 

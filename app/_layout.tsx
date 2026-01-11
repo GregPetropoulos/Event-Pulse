@@ -1,11 +1,12 @@
-import { ThemeProvider, useAppTheme } from '@/providers/ThemeProvider';
-import { ThemeProvider as NavigationThemeProvider } from '@react-navigation/native';
+import 'react-native-reanimated';
+import { useEffect, useState } from 'react';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
-import { useEffect, useState } from 'react';
-import 'react-native-reanimated';
 import { SafeAreaProvider, SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { ThemeProvider, useAppTheme } from '@/providers/ThemeProvider';
+import { QueryProvider } from '@/providers/QueryProvider';
+import { ThemeProvider as NavigationNativeThemeProvider } from '@react-navigation/native';
 
 SplashScreen.setOptions({
   duration: 4000,
@@ -16,7 +17,7 @@ export const unstable_settings = {
   anchor: '(tabs)',
 };
 
-export const RootNavigationWrapper = () => {
+const RootNavigationWrapper = () => {
   const { theme } = useAppTheme();
   const { top, left, right, bottom } = useSafeAreaInsets();
 
@@ -47,7 +48,7 @@ export const RootNavigationWrapper = () => {
   }
 
   return (
-    <NavigationThemeProvider value={theme}>
+    <NavigationNativeThemeProvider value={theme}>
       <SafeAreaView
         style={{
           flex: 1,
@@ -89,16 +90,18 @@ export const RootNavigationWrapper = () => {
         </Stack>
         <StatusBar style={theme.dark ? 'light' : 'dark'} />
       </SafeAreaView>
-    </NavigationThemeProvider>
+    </NavigationNativeThemeProvider>
   );
 };
 
 export default function RootLayout() {
   return (
-    <ThemeProvider>
-      <SafeAreaProvider>
-        <RootNavigationWrapper />
-      </SafeAreaProvider>
-    </ThemeProvider>
+    <QueryProvider>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          <RootNavigationWrapper />
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </QueryProvider>
   );
 }

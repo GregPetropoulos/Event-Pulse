@@ -357,3 +357,6 @@ Notes Polish Features:
 Notes on add ons
 
 - Added unit testing for common components and hooks
+- online manager hook
+- refresh on focus hook
+- https://tanstack.com/query/latest/docs/framework/react/examples/react-native?path=examples%2Freact%2Freact-native%2Fsrc%2Fhooks%2FuseAppState.ts
