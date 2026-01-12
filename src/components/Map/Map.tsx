@@ -12,9 +12,9 @@ import { useEvents } from '@/features/events/hooks';
 
 // Types and Utils
 import { locationList } from '@/test/mocks/mockLocationList';
-import { NYC_DEFAULT } from '@/constants/mapDefaults';
 import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
 //! Will need to configure this for android https://docs.expo.dev/versions/latest/sdk/maps/
 
@@ -24,16 +24,18 @@ const Map = () => {
   const googleMapRef = useRef<GoogleMapsViewType>(null);
   const { userCoords } = useAppStore((state) => state);
   const { data, isLoading, error } = useEvents({
-    lat: userCoords?.latitude ?? 0,
-    lng: userCoords?.longitude ?? 0,
+    lat: userCoords.latitude,
+    lng: userCoords.longitude,
     radius: 10,
   }); 
+console.log("USERCOORDS--->",userCoords)
+
   console.log('useEvents Hook --> Data', data);
   const [locationIndex, setLocationIndex] = useState(0);
   const route = useRouter();
   const pathname = usePathname();
   const initialCameraPosition = {
-    coordinates: userCoords ?? NYC_DEFAULT,
+    coordinates: userCoords,
     zoom: 14,
   };
   const handleChangeWithRef = (direction: 'next' | 'prev' | 'me') => {
@@ -105,7 +107,7 @@ const Map = () => {
             accessibilityLabel='Location on and off'
             accessibilityRole='button'
             onPress={handleLocationPermissionModal}>
-            {userCoords ? (
+            {userCoords.latitude !== NYC_DEFAULT.latitude && userCoords.longitude !== NYC_DEFAULT.longitude? (
               <IconSymbol
                 name='mappin'
                 color={theme.colors.success}

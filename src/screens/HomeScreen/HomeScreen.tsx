@@ -12,6 +12,7 @@ import { getUserLocation } from '@/features/location/locationService';
 
 // Utils & Types
 import { cardData } from '@/test/mocks/mockCardData';
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
 export default function HomeScreen() {
   const appState = useRef(AppState.currentState);
@@ -38,7 +39,7 @@ export default function HomeScreen() {
       updateUserLocation(result.location);
     } else {
       // Handle "no permission" mode – maybe default to a fallback location
-      updateUserLocation(null); // NYC fallback
+      updateUserLocation(NYC_DEFAULT); // NYC fallback
     }
   };
 

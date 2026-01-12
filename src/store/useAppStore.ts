@@ -1,13 +1,14 @@
 import { storage } from '@/storage/mmkv';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
 
 type Event = {
   id: string;
   name: string;
   timestamp: string;
 };
-type UserCoords = { latitude: number; longitude: number } | null;
+type UserCoords = { latitude: number; longitude: number }
 
 type AppState = {
   favorites: Event[];
@@ -23,7 +24,7 @@ export const useAppStore = create<AppState>()(
       favorites: [],
       addFavorite: (event) => set({ favorites: [...get().favorites, event] }),
       removeFavorite: (id) => ({ favorites: get().favorites.filter((e) => e.id !== id) }),
-      userCoords: null,
+      userCoords: NYC_DEFAULT,
       updateUserLocation: (coords: UserCoords) => set({ userCoords: coords }),
     }),
     {
