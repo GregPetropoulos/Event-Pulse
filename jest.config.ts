@@ -11,7 +11,7 @@ const config: Config = {
   collectCoverageFrom: ['**/*.{ts,tsx,js,jsx}', '!**/coverage/**', '!**/node_modules/**', '!**/babel.config.js', '!**/expo-env.d.ts', '!**/.expo/**'],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
-     '^react-native-mmkv$': '<rootDir>/src/test/mocks/react-native-mmkv.js',
+    '^react-native-mmkv$': '<rootDir>/src/test/mocks/react-native-mmkv.js',
   },
 };
 

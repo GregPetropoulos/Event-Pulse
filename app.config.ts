@@ -69,7 +69,7 @@ export default ({ config }: ConfigContext): ExpoConfig => {
     android: {
       config: {
         googleMaps: {
-          apiKey: process.env.GOOGLE_MAPS_ANDROID_SDK_KEY,
+          apiKey: process.env.EXPO_PUBLIC_GOOGLE_MAPS_ANDROID_SDK_KEY,
         },
       },
       adaptiveIcon: {

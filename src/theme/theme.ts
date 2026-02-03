@@ -82,6 +82,11 @@ const common = {
       fontSize: 16,
       lineHeight: 22,
     },
+    small: {
+      fontFamily: 'Inter-Regular',
+      fontSize: 14,
+      lineHeight: 18,
+    },
     caption: {
       fontFamily: 'Inter-Light',
       fontSize: 13,
@@ -205,6 +210,7 @@ const darkTheme = {
     textSecondary: '#C2C2CE',
     success: '#8AF8A2',
     error: '#FF5D5D',
+    transparent: 'transparent',
   },
   ...common,
   // fonts:{
@@ -231,6 +237,7 @@ const lightTheme = {
     border: '#E3E3E3',
     success: '#8AF8A2',
     error: '#FF5D5D',
+    transparent: 'transparent',
   },
   ...common,
   // fonts:{

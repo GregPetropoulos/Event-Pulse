@@ -1,5 +1,3 @@
-
-
 import React from 'react';
 const DefaultTheme = {
   dark: false,
@@ -24,15 +22,9 @@ const DarkTheme = {
   },
 };
 
-export const ThemeProvider = ({ children }: { children: React.ReactNode }) => (
-  <>{children}</>
-);
+export const ThemeProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
-export const NavigationContainer = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => <>{children}</>;
+export const NavigationContainer = ({ children }: { children: React.ReactNode }) => <>{children}</>;
 
 export const useTheme = () => DefaultTheme;
 
@@ -51,10 +43,7 @@ export const useRoute = () => ({
   params: {},
 });
 
-export {
-  DefaultTheme,
-  DarkTheme,
-};
+export { DefaultTheme, DarkTheme };
 
 export default {
   ThemeProvider,
@@ -65,9 +54,6 @@ export default {
   DefaultTheme,
   DarkTheme,
 };
-
-
-
 
 // const actualNav = jest.requireActual('@react-navigation/native');
 

@@ -8,7 +8,7 @@ type Event = {
   name: string;
   timestamp: string;
 };
-type UserCoords = { latitude: number; longitude: number }
+type UserCoords = { latitude: number; longitude: number };
 
 type AppState = {
   favorites: Event[];

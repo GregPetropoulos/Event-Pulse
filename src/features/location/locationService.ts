@@ -1,4 +1,3 @@
-// utils/location.ts
 import * as Location from 'expo-location';
 import { Alert, Platform, Linking } from 'react-native';
 

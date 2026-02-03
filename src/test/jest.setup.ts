@@ -5,22 +5,17 @@ import '@testing-library/jest-native/extend-expect';
 // ✅ Reanimated (modern replacement)
 jest.mock('react-native-reanimated', () => require('react-native-reanimated/mock'));
 
-
 // ✅  Expo Router
 jest.mock('expo-router', () => require('@/test/mocks/expo-router'));
 
 // ✅  React Navigation
 jest.mock('@react-navigation/native', () => require('@/test/mocks/react-navigation'));
 
-
-// ✅ Expo Maps 
-jest.mock('expo-maps',()=> require('@/test/mocks/expo-maps'))
+// ✅ Expo Maps
+jest.mock('expo-maps', () => require('@/test/mocks/expo-maps'));
 
 // ✅ Expo Location (prevents native crash)
-jest.mock('expo-location',()=> require('@/test/mocks/expo-location'))
-
-
-
+jest.mock('expo-location', () => require('@/test/mocks/expo-location'));
 
 //TODO  THESE TEMP HERE WILL REMOVE LATER
 // ✅  Theme Provider
@@ -83,18 +78,13 @@ jest.mock('expo-location',()=> require('@/test/mocks/expo-location'))
 
 // jest.mock('expo-router', () => require('@/test/mocks/expo-router'));
 
-
-
 // jest.mock('expo-router', () => ({
 //   __esModule: true,
 //   ...require('@/test/mocks/expo-router'),
 // }));
-
 
 // jest.mock('@/providers/ThemeProvider', () => ({
 //   useAppTheme: () => ({
 //     theme: require('@/test/mocks/mockTheme').mockTheme,
 //   }),
 // }));
-
-

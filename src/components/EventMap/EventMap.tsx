@@ -11,14 +11,14 @@ import { usePathname, useRouter } from 'expo-router';
 import { useEvents } from '@/features/events/hooks';
 
 // Types and Utils
-import { locationList } from '@/test/mocks/mockLocationList';
-import { AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
-import { GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
+import { AppleMapsMarker, AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
+import { GoogleMapsMarker, GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
 import { NYC_DEFAULT } from '@/constants/mapDefaults';
-
+import { IEvent } from '../../features/events/types';
+import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
 //! Will need to configure this for android https://docs.expo.dev/versions/latest/sdk/maps/
 
-const Map = () => {
+const EventMap = () => {
   const { theme } = useAppTheme();
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
@@ -26,36 +26,34 @@ const Map = () => {
   const { data, isLoading, error } = useEvents({
     lat: userCoords.latitude,
     lng: userCoords.longitude,
-    radius: 10,
-  }); 
-console.log("USERCOORDS--->",userCoords)
+    radius: 30,
+  });
 
-  console.log('useEvents Hook --> Data', data);
   const [locationIndex, setLocationIndex] = useState(0);
   const route = useRouter();
   const pathname = usePathname();
   const initialCameraPosition = {
     coordinates: userCoords,
-    zoom: 14,
+    zoom: 9,
   };
   const handleChangeWithRef = (direction: 'next' | 'prev' | 'me') => {
     const newIndex = locationIndex + (direction === 'next' ? 1 : -1);
-    const nextLocation = locationList[newIndex];
-    if (direction === 'me') {
+    const nextLocation = data?.events[newIndex];
+    if (direction === 'me' || (data?.events && newIndex > data?.events?.length - 1)) {
       appleMapRef.current?.setCameraPosition(initialCameraPosition);
       googleMapRef.current?.setCameraPosition(initialCameraPosition);
     } else {
       appleMapRef.current?.setCameraPosition({
         coordinates: {
-          latitude: nextLocation.stores[0].point[0],
-          longitude: nextLocation.stores[0].point[1],
+          latitude: nextLocation?.lat,
+          longitude: nextLocation?.lng,
         },
         zoom: 14,
       });
       googleMapRef.current?.setCameraPosition({
         coordinates: {
-          latitude: nextLocation.stores[0].point[0],
-          longitude: nextLocation.stores[0].point[1],
+          latitude: nextLocation?.lat,
+          longitude: nextLocation?.lng,
         },
         zoom: 14,
       });
@@ -85,7 +83,7 @@ console.log("USERCOORDS--->",userCoords)
         <View
           style={{ ...styles.controlsContainer, backgroundColor: theme.colors.surface }}
           pointerEvents='auto'>
-          <Button
+          {/* <Button
             accessibilityLabel='Previous Button'
             title='Prev'
             color={theme.colors.textPrimary}
@@ -96,7 +94,7 @@ console.log("USERCOORDS--->",userCoords)
             title='Next'
             color={theme.colors.textPrimary}
             onPress={() => handleChangeWithRef('next')}
-          />
+          /> */}
           <Button
             accessibilityLabel='Me Button'
             title='Me'
@@ -107,7 +105,7 @@ console.log("USERCOORDS--->",userCoords)
             accessibilityLabel='Location on and off'
             accessibilityRole='button'
             onPress={handleLocationPermissionModal}>
-            {userCoords.latitude !== NYC_DEFAULT.latitude && userCoords.longitude !== NYC_DEFAULT.longitude? (
+            {userCoords.latitude !== NYC_DEFAULT.latitude && userCoords.longitude !== NYC_DEFAULT.longitude ? (
               <IconSymbol
                 name='mappin'
                 color={theme.colors.success}
@@ -133,6 +131,48 @@ console.log("USERCOORDS--->",userCoords)
     );
   };
 
+  interface IGroupByVenue {
+    key: string;
+    coordinates: {
+      latitude: number;
+      longitude: number;
+    };
+    events: IEvent[];
+    title: string;
+    tintColor: string;
+  }
+
+  const groupByVenue = (): IGroupByVenue[] => {
+    // Only show the venue marker
+    // Each venue group has an array of events associated it
+    const mapObj = new Map<string, IGroupByVenue>();
+    data?.events.forEach((event, idx) => {
+      const latitude = parseFloat(event.lat.toFixed(4));
+      const longitude = parseFloat(event.lng.toFixed(4));
+      const title = event.venue;
+      const key = `${latitude},${longitude}`;
+      const existing = mapObj.get(key);
+      if (existing) {
+        existing.events.push(event);
+      } else {
+        mapObj.set(key, { key, coordinates: { latitude, longitude }, events: [event], title, tintColor: theme.colors.textPrimary });
+      }
+    });
+    return Array.from(mapObj.values());
+  };
+
+  const appleMarkers: AppleMapsMarker[] = groupByVenue().map((item) => ({
+    coordinates: item.coordinates,
+    title: item.events.length > 1 ? `${item.title} + ${item.events.length - 1} more` : item.title,
+    tintColor: item.tintColor,
+  }));
+
+  const googleMarkers: GoogleMapsMarker[] = groupByVenue().map((item) => ({
+    coordinates: item.coordinates,
+    title: item.title,
+    snippet: item.events.length > 1 ? 'Tap to see all events' : `${item.events[0].city} ${formatIsoToWeekDayMMDDYYYY(item.events[0].date)}`,
+  }));
+
   if (Platform.OS === 'ios') {
     return (
       <View style={{ flex: 1 }}>
@@ -143,6 +183,8 @@ console.log("USERCOORDS--->",userCoords)
             uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
             properties={{ isMyLocationEnabled: true }}
             cameraPosition={initialCameraPosition}
+            markers={appleMarkers}
+            // onMarkerClick={(props)=>console.log("PROPS",props)}
           />
         </View>
         {renderMapControls()}
@@ -158,6 +200,7 @@ console.log("USERCOORDS--->",userCoords)
             uiSettings={{ compassEnabled: true }}
             properties={{ isMyLocationEnabled: true }}
             cameraPosition={initialCameraPosition}
+            markers={googleMarkers}
           />
         </View>
         {renderMapControls()}
@@ -179,7 +222,7 @@ console.log("USERCOORDS--->",userCoords)
   }
 };
 
-export default Map;
+export default EventMap;
 const styles = StyleSheet.create({
   controlsContainer: {
     paddingVertical: 2,

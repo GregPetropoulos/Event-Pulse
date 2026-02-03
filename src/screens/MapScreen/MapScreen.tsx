@@ -1,6 +1,6 @@
 // import MapView, { Marker } from "expo-maps";
-import Map from '../../components/Map/Map';
+import EventMap from '../../components/EventMap/EventMap';
 
 export default function MapScreen() {
-  return <Map>{/* <Marker coordinate={coords} /> */}</Map>;
+  return <EventMap>{/* <Marker coordinate={coords} /> */}</EventMap>;
 }

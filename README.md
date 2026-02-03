@@ -270,11 +270,12 @@ When you present this app to potential employers:
 ### Quick Clear Cache
 
 [expo cli clear cache](https://docs.expo.dev/troubleshooting/clear-cache-windows/#expo-cli-and-npm)
+
 - rm -rf node_modules
 - npm cache clean --force
 - npm install
 - watchman watch-del-all
-- rm -fr $TMPDIR/haste-map-*
+- rm -fr $TMPDIR/haste-map-\*
 - rm -rf $TMPDIR/metro-cache
 - npx expo start --clear
 
@@ -282,7 +283,6 @@ When you present this app to potential employers:
 
 - npm run reste:cache
 - npx expo start --clear
-
 
 ## Troubleshooting
 
