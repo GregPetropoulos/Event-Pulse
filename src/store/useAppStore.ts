@@ -16,6 +16,8 @@ type AppState = {
   removeFavorite: (id: string) => void;
   userCoords: UserCoords;
   updateUserLocation: (coords: UserCoords) => void;
+  locationPermissionGranted: boolean; 
+  setLocationPermission: (granted: boolean) => void;
 };
 
 export const useAppStore = create<AppState>()(
@@ -25,7 +27,11 @@ export const useAppStore = create<AppState>()(
       addFavorite: (event) => set({ favorites: [...get().favorites, event] }),
       removeFavorite: (id) => ({ favorites: get().favorites.filter((e) => e.id !== id) }),
       userCoords: NYC_DEFAULT,
-      updateUserLocation: (coords: UserCoords) => set({ userCoords: coords }),
+      updateUserLocation: (coords: UserCoords) => set({ userCoords: coords ?? NYC_DEFAULT }),
+      // In Home screen sync loc permissions to the store via useLocation hook
+      locationPermissionGranted:false,
+      setLocationPermission: (granted: boolean) => set({locationPermissionGranted:granted})
+
     }),
     {
       name: 'app-storage',

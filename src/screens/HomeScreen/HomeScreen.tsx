@@ -1,127 +1,137 @@
 import TextBody from '@/components/common/Typography/TextBody/TextBody';
-import { Image } from 'expo-image';
-import * as Linking from 'expo-linking';
-import { useCallback, useEffect, useRef } from 'react';
-import { ActivityIndicator, AppState, FlatList, Pressable, StyleSheet, View } from 'react-native';
-import EventMap from '../../components/EventMap/EventMap';
+import { useEffect, useRef, useCallback, useState } from 'react';
+import { AppState, StyleSheet, View, Button } from 'react-native';
+import EventMap from '../../features/events/ui/EventMap/EventMap';
+import EventList from '@/features/events/ui/EventList/EventList';
 
 // Hooks
-import { useEvents } from '@/features/events/hooks';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
-
-// Service
-import { getUserLocation } from '@/features/location/locationService';
+import { useLocation } from '@/hooks/useLocation';
 
 // Utils & Types
-// import { cardData } from '@/test/mocks/mockCardData';
-import TextSmall from '@/components/common/Typography/TextSmall/TextSmall';
-import { NYC_DEFAULT } from '@/constants/mapDefaults';
-import { IEvent } from '@/features/events/types';
-import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
-const BLURHASH =
-  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+import Loader from '@/components/common/Loader/Loader';
 
-// Approximate row height — adjust to match your actual layout
-const ITEM_HEIGHT = 93; // 75px image + md paddingVertical + separator
+// Default location - NYC
+const NYC_DEFAULT = {
+  latitude: 40.7128,
+  longitude: -74.0060,
+};
 
 export default function HomeScreen() {
   const appState = useRef(AppState.currentState);
   const { theme } = useAppTheme();
-  const { userCoords, updateUserLocation } = useAppStore((state) => state);
+  const { userCoords, updateUserLocation, setLocationPermission } = useAppStore((state) => state);
+  const { location, loading, error, requestLocation } = useLocation();
+  const [hasRequestedOnMount, setHasRequestedOnMount] = useState(false);
 
-  const { data, isLoading, error } = useEvents({
-    lat: userCoords.latitude,
-    lng: userCoords.longitude,
-    radius: 30,
-    size: 100,
+  // Update store when location changes
+  useEffect(() => {
+    if (location?.status === 'granted' && location.location) {
+      updateUserLocation({
+        latitude: location.location.latitude,
+        longitude: location.location.longitude,
+      });
+       setLocationPermission(true);
+    } else if (location?.status === 'denied' || location?.status === 'settings') {
+      // Set default NYC location when permission is denied
+      console.log('Permission denied, using NYC default location');
+      updateUserLocation(NYC_DEFAULT);
+       setLocationPermission(false);
+    }
+  }, [location, updateUserLocation]);
+
+  // Request location - this will check current permission status
+  const handleLocationRequest = useCallback(async () => {
+    try {
+      await requestLocation();
+    } catch (err) {
+      console.error('Failed to request location:', err);
+    }
+  }, [requestLocation]);
+
+useEffect(() => {
+  // Initial location request - only once
+  if (!hasRequestedOnMount) {
+    handleLocationRequest();
+    setHasRequestedOnMount(true);
+  }
+
+  // Subscribe to app state changes
+  const subscription = AppState.addEventListener('change', async (nextAppState) => {
+    // Transition from background/inactive to active
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      console.log('App returned to foreground. Re-checking location permissions...');
+      
+      // Only re-request if we're in a 'settings' state (user might have enabled it)
+      // Or if previously granted (to refresh location)
+      if (location?.status === 'settings' || location?.status === 'granted') {
+        await handleLocationRequest();
+      }
+    }
+    appState.current = nextAppState;
   });
 
-  const updateAppStateLocation = async () => {
-    const result = await getUserLocation();
-    if (result.status === 'granted' && result.location) {
-      updateUserLocation(result.location);
-    } else {
-      // Handle "no permission" mode – maybe default to a fallback location
-      updateUserLocation(NYC_DEFAULT); // NYC fallback
-    }
-  };
+  return () => subscription.remove();
+}, [handleLocationRequest, hasRequestedOnMount, location?.status]);
 
-  useEffect(() => {
-    // Subscribe to app state changes for detecting when app is is in background or foreground
-    const subscription = AppState.addEventListener('change', async (nextAppState) => {
-      // Transition from background/inactive to active
-      if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
-        // console.log('App returned to foreground. Re-checking settings...');
-        updateAppStateLocation();
-      }
-      appState.current = nextAppState;
-    });
 
-    return () => subscription.remove();
-  }, []);
+  // useEffect(() => {
+  //   // Initial location request - only once
+  //   if (!hasRequestedOnMount) {
+  //     handleLocationRequest();
+  //     setHasRequestedOnMount(true);
+  //   }
 
-  // Pre-compute dynamic styles that depend on theme but not on individual items
-  const evenBgColor = theme.colors.transparent;
-  const oddBgColor = theme.colors.surface;
+  //   // Subscribe to app state changes
+  //   const subscription = AppState.addEventListener('change', async (nextAppState) => {
+  //     // Transition from background/inactive to active
+  //     if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+  //       console.log('App returned to foreground. Re-checking location permissions...');
+  //       // Always re-check when returning from background
+  //       // This handles cases where user changed permissions in settings
+  //       await handleLocationRequest();
+  //     }
+  //     appState.current = nextAppState;
+  //   });
 
-  const renderItem = useCallback(
-    ({ item, index }: { item: IEvent; index: number }) => {
-      // console.log('<---------------------item', item);
-      const dateTime = formatIsoToWeekDayMMDDYYYY(item.date) ?? '';
-      const handleCardPress = async () => {
-        await Linking.openURL(item.url);
-      };
-      return (
-        <>
-          <Pressable
-            accessibilityLabel='Event Card Item'
-            accessibilityRole='button'
-            onPress={handleCardPress}
-            style={[
-              styles.card,
-              {
-                backgroundColor: index % 2 === 0 ? evenBgColor : oddBgColor,
-                paddingVertical: theme.spacing.md,
-                paddingLeft: theme.spacing.xs,
-              },
-            ]}>
-            <View style={[styles.imageView, { borderColor: theme.colors.textPrimary, borderWidth: 0.75 }]}>
-              <Image
-                style={styles.image}
-                source={item.image}
-                placeholder={{ blurhash: BLURHASH }}
-                transition={1000}
-              />
-            </View>
-            <View style={[styles.textContainer, { marginLeft: theme.spacing.sm }]}>
-              <TextBody style={{ fontWeight: 900 }}>{item.title}</TextBody>
-              <TextSmall>{`${item.city}, ${item.venue}`}</TextSmall>
-              <TextSmall>{dateTime}</TextSmall>
-            </View>
-          </Pressable>
-          <View style={[styles.separator, { borderBottomColor: theme.gradient.secondary[0] }]} />
-        </>
-      );
-    },
-    [theme, oddBgColor, evenBgColor],
-  );
-  const keyExtractor = useCallback((item: IEvent) => item.id, []);
-  const getItemLayout = useCallback(
-    (_: any, index: number) => ({
-      length: ITEM_HEIGHT,
-      offset: ITEM_HEIGHT * index,
-      index,
-    }),
-    [],
-  );
-  if (isLoading) {
+  //   return () => subscription.remove();
+  // }, [handleLocationRequest, hasRequestedOnMount]);
+
+  console.log('userCoords==========>', userCoords);
+  console.log('location status=====>', location?.status);
+
+  // Show loader while getting initial location
+  if (loading && !location) {
     return (
-      <View style={styles.activityView}>
-        <ActivityIndicator
-          size='large'
+      <View style={[styles.activityView, { backgroundColor: theme.colors.background }]}>
+        <Loader />
+        <TextBody style={{ marginTop: 16 }}>Getting your location...</TextBody>
+      </View>
+    );
+  }
+
+  // Show error state if needed (but not for denied - that falls back to NYC)
+  if (error && location?.status !== 'denied' && location?.status !== 'settings') {
+    return (
+      <View style={[styles.activityView, { backgroundColor: theme.colors.background }]}>
+        <TextBody>Unable to get location</TextBody>
+        <TextBody style={{ marginTop: 8, opacity: 0.7 }}>{error}</TextBody>
+        <Button 
+          title="Try Again" 
+          onPress={handleLocationRequest}
           color={theme.colors.primary}
         />
+      </View>
+    );
+  }
+
+  // Don't render map/list until we have a location (either real or default)
+  if (!userCoords) {
+    return (
+      <View style={[styles.activityView, { backgroundColor: theme.colors.background }]}>
+        <Loader />
+        <TextBody style={{ marginTop: 16 }}>Loading...</TextBody>
       </View>
     );
   }
@@ -136,47 +146,12 @@ export default function HomeScreen() {
         <EventMap />
       </View>
       <View style={{ flex: 1 }}>
-        {error && <TextBody>{error.message}</TextBody>}
-        {data?.events.length === 0 && !isLoading ? (
-          <TextBody>No Data available</TextBody>
-        ) : (
-          <FlatList
-            data={data?.events}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            getItemLayout={getItemLayout}
-            windowSize={11}
-            initialNumToRender={8}
-            maxToRenderPerBatch={6}
-          />
-        )}
+        <EventList />
       </View>
     </View>
   );
 }
-const styles = StyleSheet.create({
-  imageView: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 75,
-    height: 75,
-    overflow: 'hidden',
-    borderRadius: 50,
-  },
-  image: {
-    flex: 1,
-    width: '100%',
-  },
-  card: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  textContainer: {
-    flex: 1,
-  },
-  separator: {
-    borderBottomWidth: 2,
-    marginVertical: 1,
-  },
+
+export const styles = StyleSheet.create({
   activityView: { flex: 1, justifyContent: 'center', alignItems: 'center' },
 });

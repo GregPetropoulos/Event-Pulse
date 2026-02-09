@@ -2,27 +2,30 @@ import { IconSymbol } from '@/components/common/Icon/IconSymbol';
 import { AppleMaps, GoogleMaps } from 'expo-maps';
 import { useRef, useState } from 'react';
 import { Button, Platform, Pressable, StyleSheet, View } from 'react-native';
-import TextBody from '../common/Typography/TextBody/TextBody';
+import TextBody from '../../../../components/common/Typography/TextBody/TextBody';
+import Loader from '@/components/common/Loader/Loader';
 
 // Hooks
+import { useEvents } from '@/features/events/hooks';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
 import { usePathname, useRouter } from 'expo-router';
-import { useEvents } from '@/features/events/hooks';
 
 // Types and Utils
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
+import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
 import { AppleMapsMarker, AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsMarker, GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
-import { NYC_DEFAULT } from '@/constants/mapDefaults';
-import { IEvent } from '../../features/events/types';
-import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
+import { IEvent } from '../../types';
 //! Will need to configure this for android https://docs.expo.dev/versions/latest/sdk/maps/
 
 const EventMap = () => {
   const { theme } = useAppTheme();
   const appleMapRef = useRef<AppleMapsViewType>(null);
   const googleMapRef = useRef<GoogleMapsViewType>(null);
-  const { userCoords } = useAppStore((state) => state);
+  const { userCoords, locationPermissionGranted } = useAppStore((state) => state);
+
+  console.log('USERCORDS IN EVENTMAP MUST BE SET BY STATE WHEN HOME SCREEN CHECKS FOR PERMISSIONS', userCoords);
   const { data, isLoading, error } = useEvents({
     lat: userCoords.latitude,
     lng: userCoords.longitude,
@@ -146,7 +149,9 @@ const EventMap = () => {
     // Only show the venue marker
     // Each venue group has an array of events associated it
     const mapObj = new Map<string, IGroupByVenue>();
-    data?.events.forEach((event, idx) => {
+    // if(userCoords.latitude &&userCoords.longitude && data && data?.events?.length>0){
+
+    data?.events.forEach((event: IEvent, idx: number) => {
       const latitude = parseFloat(event.lat.toFixed(4));
       const longitude = parseFloat(event.lng.toFixed(4));
       const title = event.venue;
@@ -159,6 +164,7 @@ const EventMap = () => {
       }
     });
     return Array.from(mapObj.values());
+    
   };
 
   const appleMarkers: AppleMapsMarker[] = groupByVenue().map((item) => ({
@@ -173,6 +179,10 @@ const EventMap = () => {
     snippet: item.events.length > 1 ? 'Tap to see all events' : `${item.events[0].city} ${formatIsoToWeekDayMMDDYYYY(item.events[0].date)}`,
   }));
 
+  // Only enable "My Location" if we have permission
+  // const hasLocationPermission = location?.status === 'granted';
+  const hasLocationPermission = locationPermissionGranted;
+
   if (Platform.OS === 'ios') {
     return (
       <View style={{ flex: 1 }}>
@@ -180,8 +190,8 @@ const EventMap = () => {
           <AppleMaps.View
             ref={appleMapRef}
             style={StyleSheet.absoluteFill}
-            uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
-            properties={{ isMyLocationEnabled: true }}
+            uiSettings={{ compassEnabled: hasLocationPermission, myLocationButtonEnabled: hasLocationPermission }}
+            properties={{ isMyLocationEnabled: hasLocationPermission }}
             cameraPosition={initialCameraPosition}
             markers={appleMarkers}
             // onMarkerClick={(props)=>console.log("PROPS",props)}
@@ -197,8 +207,8 @@ const EventMap = () => {
           <GoogleMaps.View
             ref={googleMapRef}
             style={StyleSheet.absoluteFill}
-            uiSettings={{ compassEnabled: true }}
-            properties={{ isMyLocationEnabled: true }}
+            uiSettings={{ compassEnabled: hasLocationPermission, myLocationButtonEnabled: hasLocationPermission }}
+            properties={{ isMyLocationEnabled: hasLocationPermission }}
             cameraPosition={initialCameraPosition}
             markers={googleMarkers}
           />
