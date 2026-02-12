@@ -8,8 +8,9 @@ interface PrimaryButtonProps {
   onPress: () => void;
   buttonWidth?: number;
   size?: 'xs' | 'sm' | 'md' | 'lg';
+  disabled?: boolean;
 }
-const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps) => {
+const PrimaryButton = ({ title, onPress, buttonWidth, size, disabled = false }: PrimaryButtonProps) => {
   const {
     theme: { colors, gradient, radius, spacing, components },
   } = useAppTheme();
@@ -19,6 +20,7 @@ const PrimaryButton = ({ title, onPress, buttonWidth, size }: PrimaryButtonProps
       accessibilityLabel='primary button'
       accessibilityRole='button'
       testID='primary-button-id'
+      disabled={disabled}
       onPress={onPress}
       style={{
         width: buttonWidth

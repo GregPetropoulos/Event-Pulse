@@ -26,7 +26,6 @@ const EventList = ({ events }: { events: IEvent[] | undefined }) => {
 
   const renderItem = useCallback(
     ({ item, index }: { item: IEvent; index: number }) => {
-      // console.log('<---------------------item', item);
       const dateTime = formatIsoToWeekDayMMDDYYYY(item.date) ?? '';
       const handleCardPress = async () => {
         await Linking.openURL(item.url);
