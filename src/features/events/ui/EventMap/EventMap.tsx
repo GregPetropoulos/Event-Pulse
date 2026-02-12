@@ -1,22 +1,22 @@
 import { IconSymbol } from '@/components/common/Icon/IconSymbol';
 import { AppleMaps, GoogleMaps } from 'expo-maps';
-import { useRef, useState } from 'react';
-import { Button, Platform, Pressable, StyleSheet, View } from 'react-native';
-import TextBody from '../common/Typography/TextBody/TextBody';
+import { useRef, useState, useEffect } from 'react';
+import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import TextBody from '../../../../components/common/Typography/TextBody/TextBody';
 
 // Hooks
+import { useEvents } from '@/features/events/hooks';
 import { useAppTheme } from '@/providers/ThemeProvider';
 import { useAppStore } from '@/store/useAppStore';
 import { usePathname, useRouter } from 'expo-router';
-import { useEvents } from '@/features/events/hooks';
 
 // Types and Utils
+import { NYC_DEFAULT } from '@/constants/mapDefaults';
+import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
 import { AppleMapsMarker, AppleMapsViewType } from 'expo-maps/build/apple/AppleMaps.types';
 import { GoogleMapsMarker, GoogleMapsViewType } from 'expo-maps/build/google/GoogleMaps.types';
-import { NYC_DEFAULT } from '@/constants/mapDefaults';
-import { IEvent } from '../../features/events/types';
-import { formatIsoToWeekDayMMDDYYYY } from '@/utils/dateUtils';
-//! Will need to configure this for android https://docs.expo.dev/versions/latest/sdk/maps/
+import { IEvent } from '../../types';
+import { checkLocationPermission } from '@/features/location/locationService';
 
 const EventMap = () => {
   const { theme } = useAppTheme();
@@ -30,12 +30,25 @@ const EventMap = () => {
   });
 
   const [locationIndex, setLocationIndex] = useState(0);
+  const [hasLocationPermission, setHasLocationPermission] = useState(false);
   const route = useRouter();
   const pathname = usePathname();
+
+  // Check permissions on mount only
+  useEffect(() => {
+    verifyLocationPermission();
+  }, [userCoords]);
+
+  const verifyLocationPermission = async () => {
+    const status = await checkLocationPermission();
+    setHasLocationPermission(status === 'granted');
+  };
+
   const initialCameraPosition = {
     coordinates: userCoords,
     zoom: 9,
   };
+
   const handleChangeWithRef = (direction: 'next' | 'prev' | 'me') => {
     const newIndex = locationIndex + (direction === 'next' ? 1 : -1);
     const nextLocation = data?.events[newIndex];
@@ -70,42 +83,40 @@ const EventMap = () => {
     }
   };
 
-  const handleLocationPermissionModal = () => {
+  const handleLocationPermissionModal = async () => {
+    // Re-check permission status before opening modal
+    // User might have granted it in settings
+    const status = await checkLocationPermission();
+    setHasLocationPermission(status === 'granted');
+
+    // Always open modal - it will handle both requesting and settings
     route.navigate('/modals/LocationPermission');
   };
+
   const renderMapControls = () => {
     return (
-      <View>
-        {/* <View
-          style={{ flex: 1, borderColor:'green', borderWidth:2 }}
-          pointerEvents='none'
-          /> */}
+      <>
         <View
-          style={{ ...styles.controlsContainer, backgroundColor: theme.colors.surface }}
+          style={{
+            ...styles.controlsContainer,
+            backgroundColor: theme.colors.surface,
+          }}
           pointerEvents='auto'>
-          {/* <Button
-            accessibilityLabel='Previous Button'
-            title='Prev'
-            color={theme.colors.textPrimary}
-            onPress={() => handleChangeWithRef('prev')}
-          />
-          <Button
-            accessibilityLabel='Next Button'
-            title='Next'
-            color={theme.colors.textPrimary}
-            onPress={() => handleChangeWithRef('next')}
-          /> */}
-          <Button
+          <Pressable
             accessibilityLabel='Me Button'
-            title='Me'
-            color={theme.colors.textPrimary}
-            onPress={() => handleChangeWithRef('me')}
-          />
+            hitSlop={20}
+            onPress={() => handleChangeWithRef('me')}>
+            <IconSymbol
+              name='globe.americas'
+              color={theme.colors.secondary}
+            />
+          </Pressable>
           <Pressable
             accessibilityLabel='Location on and off'
             accessibilityRole='button'
+            hitSlop={20}
             onPress={handleLocationPermissionModal}>
-            {userCoords.latitude !== NYC_DEFAULT.latitude && userCoords.longitude !== NYC_DEFAULT.longitude ? (
+            {hasLocationPermission ? (
               <IconSymbol
                 name='mappin'
                 color={theme.colors.success}
@@ -120,14 +131,15 @@ const EventMap = () => {
           <Pressable
             accessibilityLabel='Expand Map Button'
             accessibilityRole='button'
+            hitSlop={20}
             onPress={handleNavToMapScreen}>
             <IconSymbol
               name='map.fill'
-              color={theme.colors.textPrimary}
+              color={theme.colors.secondary}
             />
           </Pressable>
         </View>
-      </View>
+      </>
     );
   };
 
@@ -180,11 +192,13 @@ const EventMap = () => {
           <AppleMaps.View
             ref={appleMapRef}
             style={StyleSheet.absoluteFill}
-            uiSettings={{ compassEnabled: true, myLocationButtonEnabled: false }}
-            properties={{ isMyLocationEnabled: true }}
+            uiSettings={{
+              compassEnabled: hasLocationPermission,
+              myLocationButtonEnabled: hasLocationPermission,
+            }}
+            properties={{ isMyLocationEnabled: hasLocationPermission }}
             cameraPosition={initialCameraPosition}
             markers={appleMarkers}
-            // onMarkerClick={(props)=>console.log("PROPS",props)}
           />
         </View>
         {renderMapControls()}
@@ -197,8 +211,11 @@ const EventMap = () => {
           <GoogleMaps.View
             ref={googleMapRef}
             style={StyleSheet.absoluteFill}
-            uiSettings={{ compassEnabled: true }}
-            properties={{ isMyLocationEnabled: true }}
+            uiSettings={{
+              compassEnabled: hasLocationPermission,
+              myLocationButtonEnabled: hasLocationPermission,
+            }}
+            properties={{ isMyLocationEnabled: hasLocationPermission }}
             cameraPosition={initialCameraPosition}
             markers={googleMarkers}
           />
@@ -223,9 +240,10 @@ const EventMap = () => {
 };
 
 export default EventMap;
+
 const styles = StyleSheet.create({
   controlsContainer: {
-    paddingVertical: 2,
+    paddingVertical: 8,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',

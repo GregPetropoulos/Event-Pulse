@@ -29,6 +29,7 @@ const MAPPING = {
   'map.fill': 'map',
   'mappin.slash': 'location-off',
   mappin: 'location-on',
+  'globe.americas.fill': 'travel-explore',
 } as IconMapping;
 
 /**
